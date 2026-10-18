@@ -19,7 +19,7 @@ st.markdown("""
     /* Поле выбора техники */
     div[data-testid="stSelectbox"] label { color: #a8e6a0 !important; font-weight: 700 !important; font-size: 1.1rem !important; }
     div[data-baseweb="select"] > div {
-        background-color: #ffd54f !important; color: #1a1a1a !important;
+        background-color: #000000 !important; color: #1a1a1a !important;
         font-weight: 700 !important; font-size: 1.05rem !important;
         border: 2px solid #ffb300 !important; border-radius: 8px !important;
     }
