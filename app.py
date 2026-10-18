@@ -16,91 +16,40 @@ st.markdown("""
     }
     h1, h2, h3 { color: #ffffff !important; letter-spacing: 0.3px; }
 
-    /* Поле выбора техники — яркое золото */
-    div[data-testid="stSelectbox"] label {
-        color: #a8e6a0 !important;
-        font-weight: 700 !important;
-        font-size: 1.1rem !important;
-    }
+    /* Поле выбора техники */
+    div[data-testid="stSelectbox"] label { color: #a8e6a0 !important; font-weight: 700 !important; font-size: 1.1rem !important; }
     div[data-baseweb="select"] > div {
-        background-color: #ffd54f !important;
-        color: #1a1a1a !important;
-        font-weight: 700 !important;
-        font-size: 1.05rem !important;
-        border: 2px solid #ffb300 !important;
-        border-radius: 8px !important;
+        background-color: #ffd54f !important; color: #1a1a1a !important;
+        font-weight: 700 !important; font-size: 1.05rem !important;
+        border: 2px solid #ffb300 !important; border-radius: 8px !important;
     }
-    div[data-baseweb="select"] span,
-    div[data-baseweb="select"] div[role="button"] {
-        color: #1a1a1a !important;
-        font-weight: 700 !important;
+    div[data-baseweb="select"] span, div[data-baseweb="select"] div[role="button"] { color: #1a1a1a !important; font-weight: 700 !important; }
+    ul[role="listbox"] { background-color: #1b3a1e !important; border: 2px solid #ffb300 !important; }
+    ul[role="listbox"] li { color: #ffffff !important; font-weight: 600 !important; font-size: 1rem !important; background-color: #1b3a1e !important; }
+    ul[role="listbox"] li:hover { background-color: #2e7d32 !important; }
+    ul[role="listbox"] li[aria-selected="true"] { background-color: #43a047 !important; }
+
+    /* Поля ввода */
+    div[data-testid="stNumberInput"] label, div[data-testid="stTextInput"] label {
+        color: #a8e6a0 !important; font-weight: 600 !important; font-size: 1rem !important;
+    }
+    div[data-testid="stNumberInput"] input, div[data-testid="stTextInput"] input {
+        background-color: #ffffff !important; color: #0d1a0f !important;
+        font-weight: 700 !important; font-size: 1.05rem !important;
+        border: 2px solid #43a047 !important; border-radius: 6px !important;
     }
 
-    /* Открытое выпадающее меню — тёмный фон, яркий текст */
-    ul[role="listbox"] {
-        background-color: #1b3a1e !important;
-        border: 2px solid #ffb300 !important;
-    }
-    ul[role="listbox"] li {
-        color: #ffffff !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-        background-color: #1b3a1e !important;
-    }
-    ul[role="listbox"] li:hover {
-        background-color: #2e7d32 !important;
-        color: #ffffff !important;
-    }
-    ul[role="listbox"] li[aria-selected="true"] {
-        background-color: #43a047 !important;
-        color: #ffffff !important;
-    }
-
-    /* Поля ввода — светлый фон, тёмный текст */
-    div[data-testid="stNumberInput"] label,
-    div[data-testid="stTextInput"] label {
-        color: #a8e6a0 !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-    }
-    div[data-testid="stNumberInput"] input,
-    div[data-testid="stTextInput"] input {
-        background-color: #ffffff !important;
-        color: #0d1a0f !important;
-        font-weight: 700 !important;
-        font-size: 1.05rem !important;
-        border: 2px solid #43a047 !important;
-        border-radius: 6px !important;
-    }
-
-    /* Радиокнопки режима работы — яркие карточки */
-    div[data-testid="stRadio"] label {
-        color: #a8e6a0 !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-    }
+    /* Радиокнопки режима */
+    div[data-testid="stRadio"] label { color: #a8e6a0 !important; font-weight: 600 !important; }
     div[data-testid="stRadio"] div[role="radiogroup"] label {
-        background-color: #1b3a1e !important;
-        border: 2px solid #2e7d32 !important;
-        border-radius: 8px !important;
-        padding: 8px 14px !important;
-        margin-right: 8px !important;
+        background-color: #1b3a1e !important; border: 2px solid #2e7d32 !important;
+        border-radius: 8px !important; padding: 8px 14px !important; margin-right: 8px !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] label:hover {
-        border-color: #ffb300 !important;
-        background-color: #2e7d32 !important;
-    }
-    div[data-testid="stRadio"] div[role="radiogroup"] label p {
-        color: #ffffff !important;
-        font-weight: 700 !important;
-    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label:hover { border-color: #ffb300 !important; background-color: #2e7d32 !important; }
+    div[data-testid="stRadio"] div[role="radiogroup"] label p { color: #ffffff !important; font-weight: 700 !important; }
 
-    /* Карточки результатов */
-    .result-card {
-        padding: 24px; border-radius: 10px; margin-top: 16px;
-        border-left: 8px solid #444; background-color: #1b3a1e;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
+    /* Карточки */
+    .result-card { padding: 24px; border-radius: 10px; margin-top: 16px; border-left: 8px solid #444; background-color: #1b3a1e; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
     .result-card p { color: #ffffff !important; font-size: 1.05rem; line-height: 1.5; }
     .status-ok { border-left-color: #00e676; background-color: #143a1a; }
     .status-warn { border-left-color: #ffb300; background-color: #3e2c0a; }
@@ -110,41 +59,31 @@ st.markdown("""
     .status-crit h2 { color: #ff5252 !important; }
 
     /* Блоки нормативов */
-    .spec-box {
-        background-color: #1b3a1e; padding: 12px 16px; border-radius: 8px;
-        border: 2px solid #2e7d32; margin-bottom: 8px;
-        font-size: 1rem; color: #ffffff !important; line-height: 1.5;
-    }
+    .spec-box { background-color: #1b3a1e; padding: 12px 16px; border-radius: 8px; border: 2px solid #2e7d32; margin-bottom: 8px; font-size: 1rem; color: #ffffff !important; line-height: 1.5; }
 
     /* Зафиксированные параметры */
-    .fixed-param {
-        background-color: #234a28; padding: 12px 16px; border-radius: 8px;
-        border: 2px solid #43a047; margin-bottom: 8px;
-        color: #ffffff !important; font-size: 1rem; line-height: 1.5;
-    }
+    .fixed-param { background-color: #234a28; padding: 12px 16px; border-radius: 8px; border: 2px solid #43a047; margin-bottom: 8px; color: #ffffff !important; font-size: 1rem; line-height: 1.5; }
     .fixed-param strong { color: #ffd54f !important; }
 
     /* Ссылки-гайды */
-    .guide-link {
-        display: inline-block; margin-top: 12px; padding: 12px 20px;
-        background-color: #2e7d32; color: #ffffff !important; border-radius: 8px;
-        text-decoration: none; border: 2px solid #43a047; font-size: 1rem;
-        font-weight: 700;
-    }
+    .guide-link { display: inline-block; margin-top: 12px; padding: 12px 20px; background-color: #2e7d32; color: #ffffff !important; border-radius: 8px; text-decoration: none; border: 2px solid #43a047; font-size: 1rem; font-weight: 700; }
     .guide-link:hover { background-color: #43a047; border-color: #ffb300; }
-
     .threshold-note { font-size: 0.85em; color: #a8e6a0 !important; margin-top: 20px; }
 
-    /* Кнопка — яркая, заметная */
-    .stButton > button {
-        background-color: #ffb300 !important; color: #1a1a1a !important;
-        font-weight: 800 !important; font-size: 1.1rem !important;
-        border: 2px solid #ffd54f !important; padding: 14px 24px !important;
-        border-radius: 8px !important;
-    }
+    /* Кнопка */
+    .stButton > button { background-color: #ffb300 !important; color: #1a1a1a !important; font-weight: 800 !important; font-size: 1.1rem !important; border: 2px solid #ffd54f !important; padding: 14px 24px !important; border-radius: 8px !important; }
     .stButton > button:hover { background-color: #ffd54f !important; border-color: #ffffff !important; }
-
     hr { border-color: #2e7d32 !important; }
+
+    /* ИНТЕРАКТИВНЫЕ ИНДИКАТОРЫ */
+    .gauge-container { margin-bottom: 20px; }
+    .gauge-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: 700; font-size: 1.05rem; }
+    .gauge-bar-bg { width: 100%; height: 22px; background-color: #2a3d2c; border-radius: 11px; overflow: hidden; border: 1px solid #4a6e4d; }
+    .gauge-bar-fill { height: 100%; transition: width 0.3s ease; border-radius: 11px; }
+    .gauge-ok { background: linear-gradient(90deg, #00e676, #69f0ae); }
+    .gauge-warn { background: linear-gradient(90deg, #ffb300, #ffd54f); }
+    .gauge-crit { background: linear-gradient(90deg, #ff1744, #ff5252); }
+    .gauge-labels { display: flex; justify-content: space-between; font-size: 0.8rem; color: #a8e6a0; margin-top: 4px; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -155,9 +94,9 @@ st.markdown('<p style="font-size:1.1rem; color:#a8e6a0;">Выберите маш
 DEFAULT_MACHINES = {
     "МТЗ-80/82 (Д-240)": {
         "temp": {
-            "idle":     {"min": 70, "max": 85, "crit_high": 95,  "label": "Температура ОЖ (°C)", "note": "Холостой ход: 70–85°C, критично выше 95°C"},
-            "drive":    {"min": 80, "max": 95, "crit_high": 105, "label": "Температура ОЖ (°C)", "note": "Езда: 80–95°C, критично выше 105°C"},
-            "load":     {"min": 85, "max": 100, "crit_high": 108, "label": "Температура ОЖ (°C)", "note": "Под нагрузкой: 85–100°C, критично выше 108°C"},
+            "idle":     {"min": 70, "max": 85, "crit_high": 95,  "label": "Температура  (°C)", "note": "Холостой ход: 70–85°C, критично выше 95°C"},
+            "drive":    {"min": 80, "max": 95, "crit_high": 105, "label": "Температура  (°C)", "note": "Езда: 80–95°C, критично выше 105°C"},
+            "load":     {"min": 85, "max": 100, "crit_high": 108, "label": "Температура (°C)", "note": "Под нагрузкой: 85–100°C, критично выше 108°C"},
         },
         "pressure": {
             "idle":     {"min": 0.8, "max": 2.0, "crit_low": 0.5, "label": "Давление масла (бар)", "note": "Холостой ход: 0.8–2.0 бар, мин. 0.5 бар"},
@@ -172,9 +111,9 @@ DEFAULT_MACHINES = {
     },
     "John Deere PowerTech": {
         "temp": {
-            "idle":     {"min": 70, "max": 85, "crit_high": 95,  "label": "Температура ОЖ (°C)", "note": "Холостой ход: 70–85°C, критично выше 95°C"},
-            "drive":    {"min": 82, "max": 94, "crit_high": 104, "label": "Температура ОЖ (°C)", "note": "Езда: 82–94°C, критично выше 104°C"},
-            "load":     {"min": 85, "max": 100, "crit_high": 108, "label": "Температура ОЖ (°C)", "note": "Под нагрузкой: 85–100°C, критично выше 108°C"},
+            "idle":     {"min": 70, "max": 85, "crit_high": 95,  "label": "Температура  (°C)", "note": "Холостой ход: 70–85°C, критично выше 95°C"},
+            "drive":    {"min": 82, "max": 94, "crit_high": 104, "label": "Температура  (°C)", "note": "Езда: 82–94°C, критично выше 104°C"},
+            "load":     {"min": 85, "max": 100, "crit_high": 108, "label": "Температура  (°C)", "note": "Под нагрузкой: 85–100°C, критично выше 108°C"},
         },
         "pressure": {
             "idle":     {"min": 1.4, "max": 2.9, "crit_low": 0.8, "label": "Давление масла (бар)", "note": "Холостой ход: 1.4–2.9 бар, мин. 0.8 бар"},
@@ -189,9 +128,9 @@ DEFAULT_MACHINES = {
     },
     "ХТЗ-181 (Т-150)": {
         "temp": {
-            "idle":     {"min": 70, "max": 85, "crit_high": 95,  "label": "Температура ОЖ (°C)", "note": "Холостой ход: 70–85°C, критично выше 95°C"},
-            "drive":    {"min": 80, "max": 95, "crit_high": 105, "label": "Температура ОЖ (°C)", "note": "Езда: 80–95°C, критично выше 105°C"},
-            "load":     {"min": 85, "max": 100, "crit_high": 108, "label": "Температура ОЖ (°C)", "note": "Под нагрузкой: 85–100°C, критично выше 108°C"},
+            "idle":     {"min": 70, "max": 85, "crit_high": 95,  "label": "Температура  (°C)", "note": "Холостой ход: 70–85°C, критично выше 95°C"},
+            "drive":    {"min": 80, "max": 95, "crit_high": 105, "label": "Температура  (°C)", "note": "Езда: 80–95°C, критично выше 105°C"},
+            "load":     {"min": 85, "max": 100, "crit_high": 108, "label": "Температура  (°C)", "note": "Под нагрузкой: 85–100°C, критично выше 108°C"},
         },
         "pressure": {
             "idle":     {"min": 2.0, "max": 4.0, "crit_low": 1.5, "label": "Давление масла (бар)", "note": "Холостой ход: 2.0–4.0 бар, мин. 1.5 бар"},
@@ -206,9 +145,9 @@ DEFAULT_MACHINES = {
     },
     "Комбайн Дон-1500": {
         "temp": {
-            "idle":     {"min": 70, "max": 85, "crit_high": 95,  "label": "Температура ОЖ (°C)", "note": "Холостой ход: 70–85°C, критично выше 95°C"},
-            "drive":    {"min": 80, "max": 95, "crit_high": 105, "label": "Температура ОЖ (°C)", "note": "Езда: 80–95°C, критично выше 105°C"},
-            "load":     {"min": 85, "max": 100, "crit_high": 108, "label": "Температура ОЖ (°C)", "note": "Под нагрузкой: 85–100°C, критично выше 108°C"},
+            "idle":     {"min": 70, "max": 85, "crit_high": 95,  "label": "Температура  (°C)", "note": "Холостой ход: 70–85°C, критично выше 95°C"},
+            "drive":    {"min": 80, "max": 95, "crit_high": 105, "label": "Температура  (°C)", "note": "Езда: 80–95°C, критично выше 105°C"},
+            "load":     {"min": 85, "max": 100, "crit_high": 108, "label": "Температура  (°C)", "note": "Под нагрузкой: 85–100°C, критично выше 108°C"},
         },
         "pressure": {
             "idle":     {"min": 2.0, "max": 4.0, "crit_low": 1.5, "label": "Давление масла (бар)", "note": "Холостой ход: 2.0–4.0 бар, мин. 1.5 бар"},
@@ -236,7 +175,7 @@ selected = st.selectbox("Выберите технику", machine_options)
 # === ВЫБОР РЕЖИМА РАБОТЫ ===
 MODE_LABELS = {
     "idle": "Работа на холостых",
-    "drive": "Езда",
+    "drive": "Поездка",
     "load": "Работа с нагрузкой",
 }
 if selected != "Добавить свою технику":
@@ -263,7 +202,6 @@ if selected == "Добавить свою технику":
 
     with st.form("add_machine_form"):
         new_name = st.text_input("Название техники", placeholder="Например: К-701 (ЯМЗ-240)")
-
         template_name = st.selectbox("Тип техники (шаблон нормативов)", list(TEMPLATES.keys()))
         template = TEMPLATES[template_name]
 
@@ -290,7 +228,6 @@ if selected == "Добавить свою технику":
 
 # === ОСНОВНОЙ ИНТЕРФЕЙС ===
 spec = all_machines[selected]
-
 cur_temp = spec["temp"][mode_key]
 cur_pressure = spec["pressure"][mode_key]
 cur_vibration = spec["vibration"][mode_key]
@@ -329,13 +266,51 @@ with col_left:
         key=f"vibration_{selected}_{mode_key}"
     )
 
-    st.markdown(
-        f'<p style="color:#a8e6a0; font-size:0.9rem;">Диапазоны: '
-        f'темп. {cur_temp["min"]}–{cur_temp["max"]}°C · '
-        f'давл. {cur_pressure["min"]}–{cur_pressure["max"]} бар · '
-        f'вибр. {cur_vibration["min"]}–{cur_vibration["max"]} мм/с</p>',
-        unsafe_allow_html=True
-    )
+    # --- ФУНКЦИЯ ДЛЯ ОТРИСОВКИ ИНДИКАТОРА ---
+    def render_gauge(label, value, spec, unit, is_pressure=False):
+        # Определяем цвет и заполнение
+        max_scale = spec["max"] * 1.3 if not is_pressure else spec["max"] * 1.5
+        if max_scale == 0: max_scale = 10
+        
+        # Проверка на критические значения
+        if is_pressure:
+            if value < spec["crit_low"]:
+                color_class = "gauge-crit"
+            elif value < spec["min"] or value > spec["max"]:
+                color_class = "gauge-warn"
+            else:
+                color_class = "gauge-ok"
+        else:
+            if value > spec["crit_high"]:
+                color_class = "gauge-crit"
+            elif value > spec["max"] or value < spec["min"]:
+                color_class = "gauge-warn"
+            else:
+                color_class = "gauge-ok"
+
+        fill_pct = min(100, max(0, (value / max_scale) * 100))
+
+        st.markdown(f'''
+        <div class="gauge-container">
+            <div class="gauge-header">
+                <span>{label}</span>
+                <span>{value} {unit}</span>
+            </div>
+            <div class="gauge-bar-bg">
+                <div class="gauge-bar-fill {color_class}" style="width: {fill_pct}%;"></div>
+            </div>
+            <div class="gauge-labels">
+                <span>0</span>
+                <span>Норма: {spec["min"]}–{spec["max"]}</span>
+                <span>{max_scale:.1f}</span>
+            </div>
+        </div>
+        ''', unsafe_allow_html=True)
+
+    # Отрисовка индикаторов
+    render_gauge("Температура", temp, cur_temp, "°C")
+    render_gauge("Давление масла", pressure, cur_pressure, "бар", is_pressure=True)
+    render_gauge("Вибрация", vibration, cur_vibration, "мм/с")
 
 
 def diagnose(temp_spec, pressure_spec, vibration_spec, mode_label, temp, pressure, vibration):
