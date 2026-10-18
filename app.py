@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import time
 from datetime import datetime
-import plotly.graph_objects as go
 
 st.set_page_config(page_title="ИИ Диагностика", page_icon="🌾", layout="wide")
 
@@ -44,15 +43,17 @@ st.markdown("""
     .guide-link { display: inline-block; margin-top: 12px; color: #81c784 !important; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
     .guide-link:hover { text-decoration: underline; color: #a5d6a7 !important; }
     
-    .gauge-container { margin-bottom: 16px; }
-    .gauge-header { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
-    .gauge-bar-bg { width: 100%; height: 16px; background: #101510; border-radius: 8px; overflow: hidden; border: 1px solid #2e382e; position: relative; }
-    .gauge-bar-fill { height: 100%; transition: width 0.4s ease; border-radius: 8px; }
-    .gauge-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7d6b; margin-top: 2px; }
-    
     .fixed-spec { background-color: #1a221a; padding: 16px; border-radius: 8px; border: 1px solid #2e382e; margin-bottom: 20px; }
     .fixed-spec p { margin: 6px 0; font-size: 0.95rem; }
     .fixed-spec b { color: #a5d6a7; }
+    
+    /* Стилизация контейнера графика */
+    div[data-testid="stLineChart"] {
+        background-color: #1a221a;
+        border: 1px solid #2e382e;
+        border-radius: 8px;
+        padding: 16px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -241,49 +242,13 @@ with tab_history:
         
         st.markdown("### Сравнение показателей по времени")
         
-        # === ТЁМНЫЙ ГРАФИК В СТИЛЕ ПРИЛОЖЕНИЯ ===
-        fig = go.Figure()
+        # Используем встроенный st.line_chart с настройками цвета
+        # (Streamlit автоматически подхватит цвета, если задать тему через конфиг, 
+        # но в коде мы можем только обернуть его в стилизованный div)
+        chart_data = df_filtered.set_index("Время")[["Температура", "Давление", "Вибрация"]]
         
-        # Цвета линий: приглушённые, в тон приложению
-        colors = {"Температура": "#e0b651", "Давление": "#81c784", "Вибрация": "#d1685a"}
-        
-        for col in ["Температура", "Давление", "Вибрация"]:
-            fig.add_trace(go.Scatter(
-                x=df_filtered["Время"],
-                y=df_filtered[col],
-                mode='lines+markers',
-                name=col,
-                line=dict(color=colors[col], width=2),
-                marker=dict(size=6, color=colors[col], line=dict(width=1, color='#141a14'))
-            ))
-        
-        fig.update_layout(
-            plot_bgcolor='#141a14',
-            paper_bgcolor='#141a14',
-            font=dict(color='#d4dec8', family='Segoe UI'),
-            xaxis=dict(
-                title='Время проверки',
-                gridcolor='#2e382e',
-                zerolinecolor='#2e382e',
-                tickfont=dict(color='#8a9e7a')
-            ),
-            yaxis=dict(
-                title='Показатель',
-                gridcolor='#2e382e',
-                zerolinecolor='#2e382e',
-                tickfont=dict(color='#8a9e7a')
-            ),
-            legend=dict(
-                bgcolor='#1a221a',
-                bordercolor='#2e382e',
-                borderwidth=1,
-                font=dict(color='#d4dec8')
-            ),
-            margin=dict(l=40, r=20, t=20, b=40),
-            hovermode='x unified'
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
+        # Встроенный график
+        st.line_chart(chart_data)
         
         st.markdown("### Таблица последних проверок")
         st.dataframe(df_filtered.tail(10), use_container_width=True)
