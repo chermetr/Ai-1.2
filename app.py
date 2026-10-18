@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import time
 from datetime import datetime
+import plotly.graph_objects as go
 
 st.set_page_config(page_title="ИИ Диагностика", page_icon="🌾", layout="wide")
 
@@ -49,7 +50,6 @@ st.markdown("""
     .gauge-bar-fill { height: 100%; transition: width 0.4s ease; border-radius: 8px; }
     .gauge-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7d6b; margin-top: 2px; }
     
-    /* Стиль для зафиксированных нормативов */
     .fixed-spec { background-color: #1a221a; padding: 16px; border-radius: 8px; border: 1px solid #2e382e; margin-bottom: 20px; }
     .fixed-spec p { margin: 6px 0; font-size: 0.95rem; }
     .fixed-spec b { color: #a5d6a7; }
@@ -98,7 +98,6 @@ with tab_diag:
         machine_options = list(all_machines.keys()) + ["➕ Добавить свою технику"]
         machine = st.selectbox("Техника", machine_options, label_visibility="collapsed")
 
-        # Форма добавления своей техники
         if machine == "➕ Добавить свою технику":
             with st.form("add_machine"):
                 st.markdown("**Название техники**")
@@ -131,14 +130,12 @@ with tab_diag:
                         st.rerun()
             st.stop()
 
-        # Выбор режима
         st.subheader("2. Режим использования")
         mode_map = {"idle": "Холостой ход", "drive": "Езда", "load": "Рабочая нагрузка"}
         mode = st.radio("Режим", list(mode_map.keys()), format_func=lambda x: mode_map[x], horizontal=True, label_visibility="collapsed")
         
         spec = all_machines[machine][mode]
 
-        # === НОРМАТИВЫ (СТАТИЧНЫЕ, НЕ РЕДАКТИРУЕМЫЕ) ===
         st.subheader("3. Исходные нормативы (зафиксированы)")
         st.markdown(f"""
         <div class="fixed-spec">
@@ -166,7 +163,6 @@ with tab_diag:
                 actions = []
                 links = set()
 
-                # Логика
                 if val_t > spec['t'][2]:
                     score += 2; reasons.append(f"Температура {val_t}°C критически высокая."); actions.append("Остановите двигатель, проверьте охлаждающую жидкость."); links.add("cooling")
                 elif val_t > spec['t'][1]:
@@ -182,7 +178,6 @@ with tab_diag:
                 elif val_v > spec['v'][1]:
                     score += 1; reasons.append(f"Вибрация {val_v} мм/с повышена."); actions.append("Осмотрите вращающиеся узлы."); links.add("vibration")
 
-                # Сохранение в историю
                 history_entry = {
                     "Время": datetime.now().strftime("%H:%M:%S"),
                     "Техника": machine,
@@ -194,7 +189,6 @@ with tab_diag:
                 }
                 st.session_state.history.append(history_entry)
 
-                # Вывод
                 if score == 0:
                     st.markdown(f'''
                     <div class="res-box res-ok">
@@ -242,19 +236,58 @@ with tab_history:
     else:
         df = pd.DataFrame(st.session_state.history)
         
-        # Фильтр
         selected_machine = st.selectbox("Выберите технику для анализа", df["Техника"].unique())
         df_filtered = df[df["Техника"] == selected_machine].copy()
         
-        # Графики
         st.markdown("### Сравнение показателей по времени")
-        chart_data = df_filtered.set_index("Время")[["Температура", "Давление", "Вибрация"]]
-        st.line_chart(chart_data)
+        
+        # === ТЁМНЫЙ ГРАФИК В СТИЛЕ ПРИЛОЖЕНИЯ ===
+        fig = go.Figure()
+        
+        # Цвета линий: приглушённые, в тон приложению
+        colors = {"Температура": "#e0b651", "Давление": "#81c784", "Вибрация": "#d1685a"}
+        
+        for col in ["Температура", "Давление", "Вибрация"]:
+            fig.add_trace(go.Scatter(
+                x=df_filtered["Время"],
+                y=df_filtered[col],
+                mode='lines+markers',
+                name=col,
+                line=dict(color=colors[col], width=2),
+                marker=dict(size=6, color=colors[col], line=dict(width=1, color='#141a14'))
+            ))
+        
+        fig.update_layout(
+            plot_bgcolor='#141a14',
+            paper_bgcolor='#141a14',
+            font=dict(color='#d4dec8', family='Segoe UI'),
+            xaxis=dict(
+                title='Время проверки',
+                gridcolor='#2e382e',
+                zerolinecolor='#2e382e',
+                tickfont=dict(color='#8a9e7a')
+            ),
+            yaxis=dict(
+                title='Показатель',
+                gridcolor='#2e382e',
+                zerolinecolor='#2e382e',
+                tickfont=dict(color='#8a9e7a')
+            ),
+            legend=dict(
+                bgcolor='#1a221a',
+                bordercolor='#2e382e',
+                borderwidth=1,
+                font=dict(color='#d4dec8')
+            ),
+            margin=dict(l=40, r=20, t=20, b=40),
+            hovermode='x unified'
+        )
+        
+        st.plotly_chart(fig, use_container_width=True)
         
         st.markdown("### Таблица последних проверок")
         st.dataframe(df_filtered.tail(10), use_container_width=True)
         
-        # Кнопка сброса
         st.markdown("---")
         if st.button("🗑️ Сбросить всю историю и добавленную технику"):
             st.session_state.history = []
