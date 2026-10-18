@@ -16,7 +16,7 @@ st.markdown("""
     h1, h2, h3 { color: #ffffff !important; letter-spacing: 0.3px; }
     /* Читаемый выпадающий список техники — НОВЫЙ ЦВЕТ */
     div[data-testid="stSelectbox"] label {
-        color: #d4e8c2 !important;
+        color: #3b5226 !important;
         font-weight: 700 !important;
         font-size: 1.1rem !important;
     }
