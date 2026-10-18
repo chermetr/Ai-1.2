@@ -14,36 +14,36 @@ st.markdown("""
         color: #e8f0e0 !important;
     }
     h1, h2, h3 { color: #ffffff !important; letter-spacing: 0.3px; }
-    /* Читаемый выпадающий список техники */
+    /* Читаемый выпадающий список техники — НОВЫЙ ЦВЕТ */
     div[data-testid="stSelectbox"] label {
         color: #d4e8c2 !important;
         font-weight: 700 !important;
         font-size: 1.1rem !important;
     }
     div[data-baseweb="select"] > div {
-        background-color: #f5f7f0 !important;
-        color: #1a1f16 !important;
+        background-color: #fff8e1 !important;
+        color: #3e2723 !important;
         font-weight: 700 !important;
         font-size: 1.05rem !important;
-        border: 2px solid #4caf50 !important;
+        border: 2px solid #ff9800 !important;
         border-radius: 8px !important;
     }
     div[data-baseweb="select"] span,
     div[data-baseweb="select"] div[role="button"] {
-        color: #1a1f16 !important;
+        color: #3e2723 !important;
         font-weight: 700 !important;
     }
-    /* Выпадающее меню */
+    /* Выпадающее меню — НОВЫЙ ЦВЕТ */
     ul[role="listbox"] {
-        background-color: #f5f7f0 !important;
+        background-color: #fff8e1 !important;
     }
     ul[role="listbox"] li {
-        color: #1a1f16 !important;
+        color: #3e2723 !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
     }
     ul[role="listbox"] li:hover {
-        background-color: #c8e6c9 !important;
+        background-color: #ffe0b2 !important;
     }
     /* Поля ввода — светлый фон, тёмный текст */
     div[data-testid="stNumberInput"] label,
@@ -111,7 +111,7 @@ st.markdown('<p style="font-size:1.1rem; color:#d4e8c2;">Выберите маш
 # === БАЗА НОРМАТИВОВ ===
 DEFAULT_MACHINES = {
     "МТЗ-80/82 (Д-240)": {
-        "temp": {"min": 80, "max": 95, "crit_high": 105, "label": "Температура (°C)",
+        "temp": {"min": 80, "max": 95, "crit_high": 105, "label": "Температура ОЖ (°C)",
                  "note": "Норма 80–95°C, критично выше 105°C"},
         "pressure": {"min": 2.0, "max": 3.5, "crit_low": 0.8, "label": "Давление масла (бар)",
                      "note": "Норма 2.0–3.5 бар на номинале, мин. 0.8 бар на холостых"},
@@ -159,7 +159,6 @@ if selected == "➕ Добавить свою технику":
     st.subheader("Добавление своей техники")
     st.markdown('<p style="color:#d4e8c2; font-size:1rem;">Выберите тип техники — нормативы подставятся автоматически и будут зафиксированы</p>', unsafe_allow_html=True)
 
-    # Шаблоны нормативов по типу техники
     TEMPLATES = {
         "Трактор (классический дизель)": {
             "temp": {"min": 80, "max": 95, "crit_high": 105, "label": "Температура ОЖ (°C)",
@@ -236,7 +235,6 @@ col_left, col_right = st.columns([1, 1.2])
 with col_left:
     st.subheader("Показания датчиков")
 
-    # Значения автоматически берутся из середины нормативного диапазона
     temp = st.number_input(
         spec["temp"]["label"],
         min_value=0.0, max_value=200.0,
