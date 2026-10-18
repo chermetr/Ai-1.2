@@ -14,9 +14,9 @@ st.markdown("""
         color: #e8f0e0 !important;
     }
     h1, h2, h3 { color: #ffffff !important; letter-spacing: 0.3px; }
-    /* Читаемый выпадающий список техники — НОВЫЙ ЦВЕТ */
+    /* Закрытое поле выбора техники */
     div[data-testid="stSelectbox"] label {
-        color: #3b5226 !important;
+        color: #d4e8c2 !important;
         font-weight: 700 !important;
         font-size: 1.1rem !important;
     }
@@ -33,17 +33,23 @@ st.markdown("""
         color: #3e2723 !important;
         font-weight: 700 !important;
     }
-    /* Выпадающее меню — НОВЫЙ ЦВЕТ */
+    /* ОТКРЫТОЕ выпадающее меню — светлый текст на светлом фоне */
     ul[role="listbox"] {
         background-color: #fff8e1 !important;
     }
     ul[role="listbox"] li {
-        color: #3e2723 !important;
+        color: #f5f7f0 !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
+        background-color: #fff8e1 !important;
     }
     ul[role="listbox"] li:hover {
         background-color: #ffe0b2 !important;
+        color: #f5f7f0 !important;
+    }
+    ul[role="listbox"] li[aria-selected="true"] {
+        background-color: #ffe0b2 !important;
+        color: #f5f7f0 !important;
     }
     /* Поля ввода — светлый фон, тёмный текст */
     div[data-testid="stNumberInput"] label,
