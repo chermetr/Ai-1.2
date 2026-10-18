@@ -14,7 +14,7 @@ st.markdown("""
     html, body, [class*="css"], .stMarkdown, p, span, label, div {
         color: #e6ebd8 !important;
     }
-    h1, h2, h3 { color: #f2f5ea !important; letter-spacing: 0.3px; }
+    h1, h2, h3 { color: #141a10 !important; letter-spacing: 0.3px; }
 
     /* Поле выбора техники — цвет спелой пшеницы */
     div[data-testid="stSelectbox"] label {
