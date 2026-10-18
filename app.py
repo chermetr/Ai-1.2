@@ -3,175 +3,120 @@ import time
 
 st.set_page_config(page_title="АгроСервис Диагностика", page_icon="🌾", layout="wide")
 
-# === ОФОРМЛЕНИЕ: ВЫСОКИЙ КОНТРАСТ + ПЛАВНЫЕ ПОЛОСКИ ===
+# === ОФОРМЛЕНИЕ: СПОКОЙНЫЙ СЕЛЬХОЗ СТИЛЬ ===
 st.markdown("""
 <style>
-    /* Фон — глубокий тёмный, чтобы светлый текст читался идеально */
+    /* Фон — тёмный, с лёгким зеленоватым оттенком (мох) */
     .stApp {
-        background-color: #0f1410;
-        background-image: linear-gradient(180deg, #161d17 0%, #0a0d0a 100%);
+        background-color: #1a1d18;
+        background-image: linear-gradient(180deg, #22261f 0%, #151814 100%);
     }
-    /* Весь основной текст — светлый и яркий */
     html, body, [class*="css"], .stMarkdown, p, span, label, div {
-        color: #f0f4ea !important;
+        color: #d6dccf !important;
     }
-    h1, h2, h3 { color: #ffffff !important; letter-spacing: 0.3px; }
+    h1, h2, h3 { color: #e8ebd9 !important; letter-spacing: 0.3px; }
 
-    /* Поле выбора техники — яркий читаемый контраст */
-    div[data-testid="stSelectbox"] label { 
-        color: #b8d4a8 !important; font-weight: 700 !important; font-size: 1.1rem !important; 
-    }
+    /* Поле выбора техники — приглушённый хаки */
+    div[data-testid="stSelectbox"] label { color: #a8b89a !important; font-weight: 700 !important; font-size: 1.1rem !important; }
     div[data-baseweb="select"] > div {
-        background-color: #2c3a28 !important; 
-        color: #f0f4ea !important;
+        background-color: #a8b89a !important; color: #1a1d18 !important;
         font-weight: 700 !important; font-size: 1.05rem !important;
-        border: 2px solid #6a9a3a !important; border-radius: 8px !important;
+        border: 2px solid #7d8f6b !important; border-radius: 8px !important;
     }
-    div[data-baseweb="select"] span, div[data-baseweb="select"] div[role="button"] { 
-        color: #f0f4ea !important; font-weight: 700 !important; 
-    }
+    div[data-baseweb="select"] span, div[data-baseweb="select"] div[role="button"] { color: #1a1d18 !important; font-weight: 700 !important; }
 
-    /* Выпадающий список (портал) — контрастный */
+    /* Выпадающий список — тёмный мох, светлый текст */
     div[data-baseweb="popover"] ul,
     div[data-baseweb="menu"] ul,
     ul[role="listbox"] {
-        background-color: #1a241a !important;
-        border: 2px solid #6a9a3a !important;
+        background-color: #2a3025 !important;
+        border: 2px solid #7d8f6b !important;
     }
     div[data-baseweb="popover"] li,
     div[data-baseweb="menu"] li,
     ul[role="listbox"] li {
-        color: #f0f4ea !important;
+        color: #d6dccf !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
-        background-color: #1a241a !important;
+        background-color: #2a3025 !important;
     }
     div[data-baseweb="popover"] li:hover,
     div[data-baseweb="menu"] li:hover,
     ul[role="listbox"] li:hover {
-        background-color: #3a5a2e !important;
+        background-color: #3d4733 !important;
         color: #ffffff !important;
     }
     div[data-baseweb="popover"] li[aria-selected="true"],
     div[data-baseweb="menu"] li[aria-selected="true"],
     ul[role="listbox"] li[aria-selected="true"] {
-        background-color: #4d7c3a !important;
+        background-color: #4d5c3c !important;
         color: #ffffff !important;
     }
 
-    /* Поля ввода — белый фон, тёмный текст */
+    /* Поля ввода — светлый, но не белый фон */
     div[data-testid="stNumberInput"] label, div[data-testid="stTextInput"] label {
-        color: #b8d4a8 !important; font-weight: 600 !important; font-size: 1rem !important;
+        color: #a8b89a !important; font-weight: 600 !important; font-size: 1rem !important;
     }
     div[data-testid="stNumberInput"] input, div[data-testid="stTextInput"] input {
-        background-color: #ffffff !important; color: #0f1410 !important;
+        background-color: #e8ebd9 !important; color: #1a1d18 !important;
         font-weight: 700 !important; font-size: 1.05rem !important;
-        border: 2px solid #6a9a3a !important; border-radius: 6px !important;
+        border: 2px solid #7d8f6b !important; border-radius: 6px !important;
     }
 
-    /* Радиокнопки — читаемые карточки */
-    div[data-testid="stRadio"] label { color: #b8d4a8 !important; font-weight: 600 !important; }
+    /* Радиокнопки режима — карточки в тон */
+    div[data-testid="stRadio"] label { color: #a8b89a !important; font-weight: 600 !important; }
     div[data-testid="stRadio"] div[role="radiogroup"] label {
-        background-color: #1a241a !important; border: 2px solid #4d6b3a !important;
+        background-color: #2a3025 !important; border: 2px solid #4d5c3c !important;
         border-radius: 8px !important; padding: 8px 14px !important; margin-right: 8px !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] label:hover { 
-        border-color: #9ccc65 !important; background-color: #2c3a28 !important; 
-    }
-    div[data-testid="stRadio"] div[role="radiogroup"] label p { 
-        color: #ffffff !important; font-weight: 700 !important; 
-    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label:hover { border-color: #7d8f6b !important; background-color: #3d4733 !important; }
+    div[data-testid="stRadio"] div[role="radiogroup"] label p { color: #e8ebd9 !important; font-weight: 700 !important; }
 
     /* Карточки результатов */
-    .result-card { 
-        padding: 24px; border-radius: 10px; margin-top: 16px; 
-        border-left: 8px solid #444; background-color: #1a241a; 
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-    }
-    .result-card p { color: #f0f4ea !important; font-size: 1.05rem; line-height: 1.5; }
-    .status-ok { border-left-color: #66bb6a; background-color: #1b2e1b; }
-    .status-warn { border-left-color: #ffca28; background-color: #2e2a1a; }
-    .status-crit { border-left-color: #ef5350; background-color: #2e1a1a; }
-    .status-ok h2 { color: #81c784 !important; }
-    .status-warn h2 { color: #ffd54f !important; }
-    .status-crit h2 { color: #e57373 !important; }
+    .result-card { padding: 24px; border-radius: 10px; margin-top: 16px; border-left: 8px solid #444; background-color: #2a3025; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+    .result-card p { color: #e8ebd9 !important; font-size: 1.05rem; line-height: 1.5; }
+    
+    /* Статусы — приглушённые, не неоновые */
+    .status-ok { border-left-color: #6a9a3a; background-color: #24301e; }
+    .status-warn { border-left-color: #b88a2e; background-color: #332b1a; }
+    .status-crit { border-left-color: #a8402e; background-color: #331c1a; }
+    .status-ok h2 { color: #9cc46a !important; }
+    .status-warn h2 { color: #d4a84b !important; }
+    .status-crit h2 { color: #d1685a !important; }
 
     /* Блоки нормативов */
-    .spec-box { 
-        background-color: #1a241a; padding: 12px 16px; border-radius: 8px; 
-        border: 2px solid #4d6b3a; margin-bottom: 8px; 
-        font-size: 1rem; color: #f0f4ea !important; line-height: 1.5; 
-    }
+    .spec-box { background-color: #2a3025; padding: 12px 16px; border-radius: 8px; border: 2px solid #4d5c3c; margin-bottom: 8px; font-size: 1rem; color: #d6dccf !important; line-height: 1.5; }
 
     /* Зафиксированные параметры */
-    .fixed-param { 
-        background-color: #22301f; padding: 12px 16px; border-radius: 8px; 
-        border: 2px solid #5a7d42; margin-bottom: 8px; 
-        color: #f0f4ea !important; font-size: 1rem; line-height: 1.5; 
-    }
-    .fixed-param strong { color: #b8d4a8 !important; }
+    .fixed-param { background-color: #31382a; padding: 12px 16px; border-radius: 8px; border: 2px solid #5c6e4b; margin-bottom: 8px; color: #e8ebd9 !important; font-size: 1rem; line-height: 1.5; }
+    .fixed-param strong { color: #a8b89a !important; }
 
     /* Ссылки-гайды */
-    .guide-link { 
-        display: inline-block; margin-top: 12px; padding: 12px 20px; 
-        background-color: #4d6b3a; color: #ffffff !important; border-radius: 8px; 
-        text-decoration: none; border: 2px solid #6a9a3a; font-size: 1rem; font-weight: 700; 
-    }
-    .guide-link:hover { background-color: #5a7d42; border-color: #9ccc65; }
-    .threshold-note { font-size: 0.85em; color: #b8d4a8 !important; margin-top: 20px; }
+    .guide-link { display: inline-block; margin-top: 12px; padding: 12px 20px; background-color: #4d5c3c; color: #e8ebd9 !important; border-radius: 8px; text-decoration: none; border: 2px solid #6a7d55; font-size: 1rem; font-weight: 700; }
+    .guide-link:hover { background-color: #5c6e4b; border-color: #a8b89a; }
+    .threshold-note { font-size: 0.85em; color: #a8b89a !important; margin-top: 20px; }
 
-    /* Кнопка */
-    .stButton > button { 
-        background-color: #4d6b3a !important; color: #ffffff !important; 
-        font-weight: 800 !important; font-size: 1.1rem !important; 
-        border: 2px solid #6a9a3a !important; padding: 14px 24px !important; border-radius: 8px !important; 
-    }
-    .stButton > button:hover { background-color: #5a7d42 !important; border-color: #9ccc65 !important; }
-    hr { border-color: #4d6b3a !important; }
+    /* Кнопка — спокойный зелёный */
+    .stButton > button { background-color: #4d6b2a !important; color: #e8ebd9 !important; font-weight: 800 !important; font-size: 1.1rem !important; border: 2px solid #6a8a3e !important; padding: 14px 24px !important; border-radius: 8px !important; }
+    .stButton > button:hover { background-color: #5c7d34 !important; border-color: #a8b89a !important; }
+    hr { border-color: #4d5c3c !important; }
 
-    /* === ПЛАВНЫЕ ИНТЕРАКТИВНЫЕ ПОЛОСКИ (КРАСНЫЙ-ЗЕЛЁНЫЙ-ЖЁЛТЫЙ-КРАСНЫЙ) === */
+    /* ИНТЕРАКТИВНЫЕ ИНДИКАТОРЫ */
     .gauge-container { margin-bottom: 20px; }
-    .gauge-header { 
-        display: flex; justify-content: space-between; margin-bottom: 6px; 
-        font-weight: 700; font-size: 1.05rem; color: #ffffff; 
-    }
-    /* Фон полоски — шкала с зонами (красный → зелёный → жёлтый → красный) */
-    .gauge-bar-bg { 
-        width: 100%; height: 24px; 
-        background: linear-gradient(90deg, #ef5350 0%, #66bb6a 20%, #66bb6a 60%, #ffca28 80%, #ef5350 100%);
-        border-radius: 12px; overflow: hidden; 
-        border: 1px solid #4d6b3a;
-        position: relative;
-    }
-    /* Заполнение — полупрозрачный белый слой поверх шкалы, чтобы было видно, куда смотрит стрелка */
-    .gauge-bar-fill { 
-        height: 100%; background: rgba(255, 255, 255, 0.3); 
-        transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* Плавная анимация */
-        border-radius: 12px; 
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-    }
-    /* Указатель (стрелка) на полоске */
-    .gauge-pointer {
-        position: absolute;
-        top: -2px;
-        width: 4px;
-        height: 28px;
-        background-color: #ffffff;
-        border-radius: 2px;
-        box-shadow: 0 0 8px rgba(0,0,0,0.8);
-        transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* Плавное движение */
-        transform: translateX(-50%);
-        z-index: 10;
-    }
-    .gauge-labels { 
-        display: flex; justify-content: space-between; 
-        font-size: 0.8rem; color: #b8d4a8; margin-top: 4px; 
-    }
+    .gauge-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: 700; font-size: 1.05rem; color: #e8ebd9; }
+    .gauge-bar-bg { width: 100%; height: 22px; background-color: #31382a; border-radius: 11px; overflow: hidden; border: 1px solid #5c6e4b; }
+    .gauge-bar-fill { height: 100%; transition: width 0.3s ease; border-radius: 11px; }
+    
+    /* Цвета полосок — приглушённые */
+    .gauge-ok { background: linear-gradient(90deg, #6a9a3a, #8cb85a); }
+    .gauge-warn { background: linear-gradient(90deg, #b88a2e, #d4a84b); }
+    .gauge-crit { background: linear-gradient(90deg, #a8402e, #d1685a); }
+    .gauge-labels { display: flex; justify-content: space-between; font-size: 0.8rem; color: #a8b89a; margin-top: 4px; }
 </style>
 """, unsafe_allow_html=True)
 
 st.title("АгроСервис: Диагностика техники")
-st.markdown('<p style="font-size:1.1rem; color:#b8d4a8;">Выберите машину и режим работы — нормативы подставятся автоматически</p>', unsafe_allow_html=True)
+st.markdown('<p style="font-size:1.1rem; color:#a8b89a;">Выберите машину и режим работы — нормативы подставятся автоматически</p>', unsafe_allow_html=True)
 
 # === БАЗА НОРМАТИВОВ ===
 DEFAULT_MACHINES = {
@@ -274,7 +219,7 @@ else:
 # === ФОРМА ДОБАВЛЕНИЯ СВОЕЙ ТЕХНИКИ ===
 if selected == "Добавить свою технику":
     st.subheader("Добавление своей техники")
-    st.markdown('<p style="color:#b8d4a8; font-size:1rem;">Выберите тип техники — нормативы для всех режимов подставятся автоматически и будут зафиксированы</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#a8b89a; font-size:1rem;">Выберите тип техники — нормативы для всех режимов подставятся автоматически и будут зафиксированы</p>', unsafe_allow_html=True)
 
     TEMPLATES = {
         "Трактор (классический дизель)": DEFAULT_MACHINES["МТЗ-80/82 (Д-240)"],
@@ -349,55 +294,41 @@ with col_left:
         key=f"vibration_{selected}_{mode_key}"
     )
 
-    # --- ФУНКЦИЯ ДЛЯ ОТРИСОВКИ ПЛАВНОГО ИНДИКАТОРА ---
+    # --- ФУНКЦИЯ ДЛЯ ОТРИСОВКИ ИНДИКАТОРА ---
     def render_gauge(label, value, spec, unit, is_pressure=False):
-        # Определяем максимум шкалы (немного больше критического значения для наглядности)
-        if is_pressure:
-            max_scale = spec["max"] * 1.5
-        else:
-            max_scale = spec["crit_high"] * 1.2
-        
+        max_scale = spec["max"] * 1.3 if not is_pressure else spec["max"] * 1.5
         if max_scale == 0: max_scale = 10
         
-        # Вычисляем процент заполнения и позицию указателя
-        fill_pct = min(100, max(0, (value / max_scale) * 100))
-        
-        # Визуальное определение зоны (для текста/подсказки)
         if is_pressure:
             if value < spec["crit_low"]:
-                zone_text = "КРИТИЧНО (низкое)"
-            elif value < spec["min"]:
-                zone_text = "ВНИМАНИЕ (низкое)"
-            elif value > spec["max"]:
-                zone_text = "ВНИМАНИЕ (высокое)"
+                color_class = "gauge-crit"
+            elif value < spec["min"] or value > spec["max"]:
+                color_class = "gauge-warn"
             else:
-                zone_text = "НОРМА"
+                color_class = "gauge-ok"
         else:
             if value > spec["crit_high"]:
-                zone_text = "КРИТИЧНО"
-            elif value > spec["max"]:
-                zone_text = "ВНИМАНИЕ"
-            elif value < spec["min"]:
-                zone_text = "ВНИМАНИЕ (низкое)"
+                color_class = "gauge-crit"
+            elif value > spec["max"] or value < spec["min"]:
+                color_class = "gauge-warn"
             else:
-                zone_text = "НОРМА"
+                color_class = "gauge-ok"
+
+        fill_pct = min(100, max(0, (value / max_scale) * 100))
 
         st.markdown(f'''
         <div class="gauge-container">
             <div class="gauge-header">
                 <span>{label}</span>
-                <span style="color: {'#ef5350' if 'КРИТИЧНО' in zone_text else '#ffca28' if 'ВНИМАНИЕ' in zone_text else '#66bb6a'};">
-                    {value} {unit} — {zone_text}
-                </span>
+                <span>{value} {unit}</span>
             </div>
             <div class="gauge-bar-bg">
-                <div class="gauge-bar-fill" style="width: {fill_pct}%;"></div>
-                <div class="gauge-pointer" style="left: {fill_pct}%;"></div>
+                <div class="gauge-bar-fill {color_class}" style="width: {fill_pct}%;"></div>
             </div>
             <div class="gauge-labels">
-                <span style="color:#ef5350;">0</span>
-                <span style="color:#66bb6a;">Норма: {spec["min"]}–{spec["max"]}</span>
-                <span style="color:#ef5350;">{max_scale:.1f}</span>
+                <span>0</span>
+                <span>Норма: {spec["min"]}–{spec["max"]}</span>
+                <span>{max_scale:.1f}</span>
             </div>
         </div>
         ''', unsafe_allow_html=True)
@@ -470,4 +401,41 @@ with col_right:
         with st.spinner("Обработка данных..."):
             time.sleep(0.4)
             status, explanation, recommendation, guide_key = diagnose(
-                cur_temp, cur_pressure, cur_vibration, MODE_LABELS
+                cur_temp, cur_pressure, cur_vibration, MODE_LABELS[mode_key], temp, pressure, vibration
+            )
+
+        if status == "ok":
+            st.markdown(f'''
+            <div class="result-card status-ok">
+                <h2>НОРМА</h2>
+                <p>{explanation}</p>
+                <p><strong>{recommendation}</strong></p>
+            </div>''', unsafe_allow_html=True)
+        elif status == "warn":
+            st.markdown(f'''
+            <div class="result-card status-warn">
+                <h2>НА ГРАНИ</h2>
+                <p>{explanation}</p>
+                <p><strong>{recommendation}</strong></p>
+            </div>''', unsafe_allow_html=True)
+        else:
+            st.markdown(f'''
+            <div class="result-card status-crit">
+                <h2>ТРЕБУЕТСЯ РЕМОНТ</h2>
+                <p>{explanation}</p>
+                <p><strong>{recommendation}</strong></p>
+            </div>''', unsafe_allow_html=True)
+
+        if guide_key and guide_key in GUIDES:
+            label, url = GUIDES[guide_key]
+            st.markdown(f'<a class="guide-link" href="{url}" target="_blank">{label}</a>', unsafe_allow_html=True)
+
+    else:
+        st.markdown('''
+        <div class="result-card" style="border-left-color: #4d5c3c;">
+            <h2 style="color: #a8b89a !important;">—</h2>
+            <p>Нажмите кнопку для анализа показаний.</p>
+        </div>''', unsafe_allow_html=True)
+
+st.markdown('---')
+st.markdown('<p class="threshold-note">Пороги зависят от выбранной техники и режима работы. Пользовательские нормативы сохраняются в рамках сессии.</p>', unsafe_allow_html=True)
