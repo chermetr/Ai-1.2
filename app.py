@@ -3,149 +3,153 @@ import time
 
 st.set_page_config(page_title="АгроСервис Диагностика", page_icon="🌾", layout="wide")
 
-# === ОФОРМЛЕНИЕ: СЕЛЬХОЗ ИНДУСТРИЯ, СЕРЬЁЗНЫЙ СТИЛЬ ===
+# === ОФОРМЛЕНИЕ: ЯРКИЙ СЕЛЬХОЗ СТИЛЬ ===
 st.markdown("""
 <style>
-    /* Фон — тёмная земля с зеленоватым оттенком */
+    /* Фон — насыщенный тёмно-зелёный */
     .stApp {
-        background-color: #141a10;
-        background-image: linear-gradient(180deg, #1c2416 0%, #10150c 100%);
+        background-color: #0d1a0f;
+        background-image: linear-gradient(180deg, #142b17 0%, #081209 100%);
     }
     html, body, [class*="css"], .stMarkdown, p, span, label, div {
-        color: #e6ebd8 !important;
+        color: #eaffea !important;
     }
-    h1, h2, h3 { color: #141a10 !important; letter-spacing: 0.3px; }
+    h1, h2, h3 { color: #ffffff !important; letter-spacing: 0.3px; }
 
-    /* Поле выбора техники — цвет спелой пшеницы */
+    /* Поле выбора техники — яркое золото */
     div[data-testid="stSelectbox"] label {
-        color: #c9d6a8 !important;
+        color: #a8e6a0 !important;
         font-weight: 700 !important;
         font-size: 1.1rem !important;
     }
     div[data-baseweb="select"] > div {
-        background-color: #d9c68a !important;
-        color: #2b2410 !important;
+        background-color: #ffd54f !important;
+        color: #1a1a1a !important;
         font-weight: 700 !important;
         font-size: 1.05rem !important;
-        border: 2px solid #a3841f !important;
+        border: 2px solid #ffb300 !important;
         border-radius: 8px !important;
     }
     div[data-baseweb="select"] span,
     div[data-baseweb="select"] div[role="button"] {
-        color: #2b2410 !important;
+        color: #1a1a1a !important;
         font-weight: 700 !important;
     }
 
-    /* ИСПРАВЛЕНИЕ: Открытое выпадающее меню — тёмный фон, светлый текст */
+    /* Открытое выпадающее меню — тёмный фон, яркий текст */
     ul[role="listbox"] {
-        background-color: #1f2718 !important;
-        border: 1px solid #a3841f !important;
+        background-color: #1b3a1e !important;
+        border: 2px solid #ffb300 !important;
     }
     ul[role="listbox"] li {
-        color: #f2f5ea !important;
+        color: #ffffff !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
-        background-color: #1f2718 !important;
+        background-color: #1b3a1e !important;
     }
     ul[role="listbox"] li:hover {
-        background-color: #3f4d33 !important;
+        background-color: #2e7d32 !important;
         color: #ffffff !important;
     }
     ul[role="listbox"] li[aria-selected="true"] {
-        background-color: #4d6b2a !important;
+        background-color: #43a047 !important;
         color: #ffffff !important;
     }
 
     /* Поля ввода — светлый фон, тёмный текст */
     div[data-testid="stNumberInput"] label,
     div[data-testid="stTextInput"] label {
-        color: #c9d6a8 !important;
+        color: #a8e6a0 !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
     }
     div[data-testid="stNumberInput"] input,
     div[data-testid="stTextInput"] input {
-        background-color: #eef0e4 !important;
-        color: #1c2416 !important;
-        font-weight: 600 !important;
+        background-color: #ffffff !important;
+        color: #0d1a0f !important;
+        font-weight: 700 !important;
         font-size: 1.05rem !important;
+        border: 2px solid #43a047 !important;
+        border-radius: 6px !important;
     }
 
-    /* Радиокнопки режима работы — тёмные карточки с зелёным акцентом */
+    /* Радиокнопки режима работы — яркие карточки */
     div[data-testid="stRadio"] label {
-        color: #c9d6a8 !important;
+        color: #a8e6a0 !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
     }
     div[data-testid="stRadio"] div[role="radiogroup"] label {
-        background-color: #222b1b !important;
-        border: 1px solid #3f4d33 !important;
+        background-color: #1b3a1e !important;
+        border: 2px solid #2e7d32 !important;
         border-radius: 8px !important;
         padding: 8px 14px !important;
         margin-right: 8px !important;
     }
     div[data-testid="stRadio"] div[role="radiogroup"] label:hover {
-        border-color: #7a8f3c !important;
+        border-color: #ffb300 !important;
+        background-color: #2e7d32 !important;
     }
     div[data-testid="stRadio"] div[role="radiogroup"] label p {
-        color: #e6ebd8 !important;
-        font-weight: 600 !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
     }
 
-    /* Карточки */
+    /* Карточки результатов */
     .result-card {
         padding: 24px; border-radius: 10px; margin-top: 16px;
-        border-left: 6px solid #444; background-color: #1f2718;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        border-left: 8px solid #444; background-color: #1b3a1e;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
-    .result-card p { color: #e6ebd8 !important; font-size: 1.05rem; line-height: 1.5; }
-    .status-ok { border-left-color: #6a9a3a; }
-    .status-warn { border-left-color: #c99a2e; }
-    .status-crit { border-left-color: #b3402e; }
-    .status-ok h2 { color: #9cc46a !important; }
-    .status-warn h2 { color: #e0b651 !important; }
-    .status-crit h2 { color: #e07864 !important; }
+    .result-card p { color: #ffffff !important; font-size: 1.05rem; line-height: 1.5; }
+    .status-ok { border-left-color: #00e676; background-color: #143a1a; }
+    .status-warn { border-left-color: #ffb300; background-color: #3e2c0a; }
+    .status-crit { border-left-color: #ff1744; background-color: #3e0e12; }
+    .status-ok h2 { color: #69f0ae !important; }
+    .status-warn h2 { color: #ffd54f !important; }
+    .status-crit h2 { color: #ff5252 !important; }
 
     /* Блоки нормативов */
     .spec-box {
-        background-color: #1f2718; padding: 12px 16px; border-radius: 8px;
-        border: 1px solid #3f4d33; margin-bottom: 8px;
-        font-size: 1rem; color: #e6ebd8 !important; line-height: 1.5;
+        background-color: #1b3a1e; padding: 12px 16px; border-radius: 8px;
+        border: 2px solid #2e7d32; margin-bottom: 8px;
+        font-size: 1rem; color: #ffffff !important; line-height: 1.5;
     }
 
     /* Зафиксированные параметры */
     .fixed-param {
-        background-color: #26301d; padding: 12px 16px; border-radius: 8px;
-        border: 1px solid #4d5c3c; margin-bottom: 8px;
-        color: #d4e0bc !important; font-size: 1rem; line-height: 1.5;
+        background-color: #234a28; padding: 12px 16px; border-radius: 8px;
+        border: 2px solid #43a047; margin-bottom: 8px;
+        color: #ffffff !important; font-size: 1rem; line-height: 1.5;
     }
-    .fixed-param strong { color: #b7cf8e !important; }
+    .fixed-param strong { color: #ffd54f !important; }
 
     /* Ссылки-гайды */
     .guide-link {
-        display: inline-block; margin-top: 12px; padding: 10px 18px;
-        background-color: #2c3824; color: #b7cf8e !important; border-radius: 6px;
-        text-decoration: none; border: 1px solid #4d5c3c; font-size: 1rem;
-        font-weight: 600;
+        display: inline-block; margin-top: 12px; padding: 12px 20px;
+        background-color: #2e7d32; color: #ffffff !important; border-radius: 8px;
+        text-decoration: none; border: 2px solid #43a047; font-size: 1rem;
+        font-weight: 700;
     }
-    .guide-link:hover { background-color: #3a4a2e; color: #cfe0a6 !important; }
+    .guide-link:hover { background-color: #43a047; border-color: #ffb300; }
 
-    .threshold-note { font-size: 0.85em; color: #9aa884 !important; margin-top: 20px; }
+    .threshold-note { font-size: 0.85em; color: #a8e6a0 !important; margin-top: 20px; }
 
-    /* Кнопка — цвет поля */
+    /* Кнопка — яркая, заметная */
     .stButton > button {
-        background-color: #4d6b2a !important; color: #f2f5ea !important;
-        font-weight: 700 !important; font-size: 1.05rem !important;
-        border: 1px solid #6a8a3e !important; padding: 12px 20px !important;
+        background-color: #ffb300 !important; color: #1a1a1a !important;
+        font-weight: 800 !important; font-size: 1.1rem !important;
+        border: 2px solid #ffd54f !important; padding: 14px 24px !important;
+        border-radius: 8px !important;
     }
-    .stButton > button:hover { background-color: #5c7d34 !important; }
+    .stButton > button:hover { background-color: #ffd54f !important; border-color: #ffffff !important; }
 
-    hr { border-color: #3f4d33 !important; }
+    hr { border-color: #2e7d32 !important; }
 </style>
 """, unsafe_allow_html=True)
 
 st.title("АгроСервис: Диагностика техники")
-st.markdown('<p style="font-size:1.1rem; color:#c9d6a8;">Выберите машину и режим работы — нормативы подставятся автоматически</p>', unsafe_allow_html=True)
+st.markdown('<p style="font-size:1.1rem; color:#a8e6a0;">Выберите машину и режим работы — нормативы подставятся автоматически</p>', unsafe_allow_html=True)
 
 # === БАЗА НОРМАТИВОВ ===
 DEFAULT_MACHINES = {
@@ -248,7 +252,7 @@ else:
 # === ФОРМА ДОБАВЛЕНИЯ СВОЕЙ ТЕХНИКИ ===
 if selected == "Добавить свою технику":
     st.subheader("Добавление своей техники")
-    st.markdown('<p style="color:#c9d6a8; font-size:1rem;">Выберите тип техники — нормативы для всех режимов подставятся автоматически и будут зафиксированы</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#a8e6a0; font-size:1rem;">Выберите тип техники — нормативы для всех режимов подставятся автоматически и будут зафиксированы</p>', unsafe_allow_html=True)
 
     TEMPLATES = {
         "Трактор (классический дизель)": DEFAULT_MACHINES["МТЗ-80/82 (Д-240)"],
@@ -326,7 +330,7 @@ with col_left:
     )
 
     st.markdown(
-        f'<p style="color:#9aa884; font-size:0.9rem;">Диапазоны: '
+        f'<p style="color:#a8e6a0; font-size:0.9rem;">Диапазоны: '
         f'темп. {cur_temp["min"]}–{cur_temp["max"]}°C · '
         f'давл. {cur_pressure["min"]}–{cur_pressure["max"]} бар · '
         f'вибр. {cur_vibration["min"]}–{cur_vibration["max"]} мм/с</p>',
@@ -428,8 +432,8 @@ with col_right:
 
     else:
         st.markdown('''
-        <div class="result-card" style="border-left-color: #3f4d33;">
-            <h2 style="color: #7d8b6a !important;">—</h2>
+        <div class="result-card" style="border-left-color: #2e7d32;">
+            <h2 style="color: #a8e6a0 !important;">—</h2>
             <p>Нажмите кнопку для анализа показаний.</p>
         </div>''', unsafe_allow_html=True)
 
