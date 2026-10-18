@@ -500,4 +500,6 @@ def diagnose(temp_spec, pressure_spec, vibration_spec, mode_label, temp, pressur
     if score == 0:
         return "ok", f"Все показатели в пределах нормы для режима «{mode_label}».", "Продолжайте эксплуатацию.", None
     elif score <= 2:
-        return "warn", "Отклонения: " + "; ".join(reasons) + ".", "Рекомендация: " + "; ".join(adv
+        return "warn", "Отклонения: " + "; ".join(reasons) + ".", "Рекомендация: " + "; ".join(advice) + ".", guide_key
+    else:
+        return "crit", "К
