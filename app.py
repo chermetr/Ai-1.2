@@ -3,44 +3,84 @@ import time
 
 st.set_page_config(page_title="АгроСервис Диагностика", page_icon="🌾", layout="wide")
 
-# === ОФОРМЛЕНИЕ В СТИЛЕ СЕЛЬХОЗ ИНДУСТРИИ ===
+# === ОФОРМЛЕНИЕ: СЕЛЬХОЗ ИНДУСТРИЯ, ВЫСОКИЙ КОНТРАСТ ===
 st.markdown("""
 <style>
+    /* Фон */
     .stApp {
-        background-color: #1a1f16;
-        background-image: linear-gradient(180deg, #1e2a1a 0%, #141a11 100%);
+        background-color: #12160e;
+        background-image: linear-gradient(180deg, #182014 0%, #0e120b 100%);
     }
-    h1, h2, h3 { color: #d4e8c2 !important; }
+    /* Весь основной текст — светлый и читаемый */
+    html, body, [class*="css"], .stMarkdown, p, span, label, div {
+        color: #e8f0e0 !important;
+    }
+    h1, h2, h3 { color: #ffffff !important; letter-spacing: 0.3px; }
+    /* Подписи полей ввода */
+    div[data-testid="stNumberInput"] label,
+    div[data-testid="stSelectbox"] label,
+    div[data-testid="stTextInput"] label {
+        color: #d4e8c2 !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+    }
+    /* Поля ввода — светлый фон, тёмный текст */
+    div[data-testid="stNumberInput"] input,
+    div[data-testid="stTextInput"] input {
+        background-color: #f5f7f0 !important;
+        color: #1a1f16 !important;
+        font-weight: 600 !important;
+        font-size: 1.05rem !important;
+    }
+    /* Выпадающий список */
+    div[data-baseweb="select"] > div {
+        background-color: #f5f7f0 !important;
+        color: #1a1f16 !important;
+        font-weight: 600 !important;
+    }
+    div[data-baseweb="select"] span { color: #1a1f16 !important; }
+    /* Карточки */
     .result-card {
         padding: 24px; border-radius: 10px; margin-top: 16px;
-        border-left: 6px solid #444; background-color: #252d20;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        border-left: 6px solid #444; background-color: #1e261a;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.4);
     }
+    .result-card p { color: #e8f0e0 !important; font-size: 1.05rem; line-height: 1.5; }
     .status-ok { border-left-color: #4caf50; }
     .status-warn { border-left-color: #ff9800; }
     .status-crit { border-left-color: #f44336; }
-    .status-ok h2 { color: #81c784; }
-    .status-warn h2 { color: #ffb74d; }
-    .status-crit h2 { color: #ef5350; }
-    .guide-link {
-        display: inline-block; margin-top: 12px; padding: 10px 18px;
-        background-color: #2e3a28; color: #a5d6a7; border-radius: 6px;
-        text-decoration: none; border: 1px solid #3a4a32; font-size: 0.95em;
-    }
-    .guide-link:hover { background-color: #3a4a32; color: #c8e6c9; }
-    .threshold-note { font-size: 0.8em; color: #8a9a7a; margin-top: 20px; }
+    .status-ok h2 { color: #81c784 !important; }
+    .status-warn h2 { color: #ffb74d !important; }
+    .status-crit h2 { color: #ef5350 !important; }
+    /* Блоки нормативов */
     .spec-box {
         background-color: #1e261a; padding: 12px 16px; border-radius: 8px;
-        border: 1px solid #2e3a28; margin-bottom: 8px; font-size: 0.9em;
-        color: #b0c4a0;
+        border: 1px solid #3a4a32; margin-bottom: 8px;
+        font-size: 1rem; color: #e8f0e0 !important; line-height: 1.5;
     }
-    div[data-testid="stSelectbox"] label { color: #a5d6a7 !important; }
-    div[data-testid="stNumberInput"] label { color: #c8e6c9 !important; }
+    /* Ссылки-гайды */
+    .guide-link {
+        display: inline-block; margin-top: 12px; padding: 10px 18px;
+        background-color: #2e3a28; color: #a5d6a7 !important; border-radius: 6px;
+        text-decoration: none; border: 1px solid #4a5a42; font-size: 1rem;
+        font-weight: 600;
+    }
+    .guide-link:hover { background-color: #3a4a32; color: #c8e6c9 !important; }
+    .threshold-note { font-size: 0.85em; color: #a0b090 !important; margin-top: 20px; }
+    /* Кнопка */
+    .stButton > button {
+        background-color: #2e7d32 !important; color: #ffffff !important;
+        font-weight: 700 !important; font-size: 1.05rem !important;
+        border: none !important; padding: 12px 20px !important;
+    }
+    .stButton > button:hover { background-color: #388e3c !important; }
+    /* Разделитель */
+    hr { border-color: #3a4a32 !important; }
 </style>
 """, unsafe_allow_html=True)
 
 st.title("🌾 АгроСервис: Диагностика техники")
-st.caption("Выберите машину или создайте свою, укажите показания датчиков — система оценит состояние")
+st.markdown('<p style="font-size:1.1rem; color:#d4e8c2;">Выберите машину или создайте свою — показатели подставятся автоматически</p>', unsafe_allow_html=True)
 
 # === БАЗА НОРМАТИВОВ ===
 DEFAULT_MACHINES = {
@@ -48,25 +88,25 @@ DEFAULT_MACHINES = {
         "temp": {"min": 80, "max": 95, "crit_high": 105, "label": "Температура ОЖ (°C)",
                  "note": "Норма 80–95°C, критично выше 105°C"},
         "pressure": {"min": 2.0, "max": 3.5, "crit_low": 0.8, "label": "Давление масла (бар)",
-                     "note": "Норма 2.0–3.5 бар на номинале, мин. 0.8 бар на холостых [citation:21]"},
+                     "note": "Норма 2.0–3.5 бар на номинале, мин. 0.8 бар на холостых"},
         "vibration": {"min": 0, "max": 4.5, "crit_high": 7.1, "label": "Вибрация (мм/с)",
-                      "note": "Норма до 4.5 мм/с (зона B), критично выше 7.1 мм/с (зона D) [citation:22]"}
+                      "note": "Норма до 4.5 мм/с, критично выше 7.1 мм/с"}
     },
     "John Deere PowerTech": {
-        "temp": {"min": 82, "max": 94, "crit_high": 104, "label": "Температура  (°C)",
+        "temp": {"min": 82, "max": 94, "crit_high": 104, "label": "Температура ОЖ (°C)",
                  "note": "Норма 82–94°C, при >104°C снизить нагрузку"},
         "pressure": {"min": 2.9, "max": 4.5, "crit_low": 1.4, "label": "Давление масла (бар)",
-                     "note": "Норма 2.9 бар на номинале (масло 105°C), мин. 1.4 бар на холостом [citation:11][citation:26]"},
+                     "note": "Норма 2.9 бар на номинале, мин. 1.4 бар на холостом"},
         "vibration": {"min": 0, "max": 4.5, "crit_high": 7.1, "label": "Вибрация (мм/с)",
-                      "note": "Норма до 4.5 мм/с, критично выше 7.1 мм/с [citation:22]"}
+                      "note": "Норма до 4.5 мм/с, критично выше 7.1 мм/с"}
     },
     "ХТЗ-181 (Т-150)": {
         "temp": {"min": 80, "max": 95, "crit_high": 105, "label": "Температура ОЖ (°C)",
                  "note": "Норма 80–95°C, критично выше 105°C"},
         "pressure": {"min": 4.0, "max": 7.0, "crit_low": 2.0, "label": "Давление масла (бар)",
-                     "note": "Норма 4.0–7.0 кгс/см² на номинале, мин. 2.0 на холостых [citation:15]"},
+                     "note": "Норма 4.0–7.0 кгс/см², мин. 2.0 на холостых"},
         "vibration": {"min": 0, "max": 4.5, "crit_high": 7.1, "label": "Вибрация (мм/с)",
-                      "note": "Норма до 4.5 мм/с, критично выше 7.1 мм/с [citation:22]"}
+                      "note": "Норма до 4.5 мм/с, критично выше 7.1 мм/с"}
     },
     "Комбайн Дон-1500": {
         "temp": {"min": 80, "max": 95, "crit_high": 105, "label": "Температура ОЖ (°C)",
@@ -74,37 +114,29 @@ DEFAULT_MACHINES = {
         "pressure": {"min": 4.0, "max": 7.0, "crit_low": 2.0, "label": "Давление масла (бар)",
                      "note": "Уточните по паспорту двигателя СМД"},
         "vibration": {"min": 0, "max": 4.5, "crit_high": 7.1, "label": "Вибрация (мм/с)",
-                      "note": "Норма до 4.5 мм/с, критично выше 7.1 мм/с [citation:22]"}
+                      "note": "Норма до 4.5 мм/с, критично выше 7.1 мм/с"}
     }
 }
 
-# === ИНИЦИАЛИЗАЦИЯ СВОЕЙ ТЕХНИКИ В SESSION STATE ===
+# === SESSION STATE ===
 if "custom_machines" not in st.session_state:
     st.session_state.custom_machines = {}
 
-# Объединяем стандартные и пользовательские
 all_machines = {**DEFAULT_MACHINES, **st.session_state.custom_machines}
 
 # === ВЫБОР ТЕХНИКИ ===
-col_select, col_add = st.columns([3, 1])
+machine_options = list(all_machines.keys()) + ["➕ Добавить свою технику"]
+selected = st.selectbox("🚜 Выберите технику", machine_options)
 
-with col_select:
-    machine_options = list(all_machines.keys()) + ["➕ Добавить свою технику"]
-    selected = st.selectbox("🚜 Выберите технику", machine_options)
-
-with col_add:
-    st.write("")
-    st.write("")
-
-# === ФОРМА ДЛЯ ДОБАВЛЕНИЯ СВОЕЙ ТЕХНИКИ ===
+# === ФОРМА ДОБАВЛЕНИЯ СВОЕЙ ТЕХНИКИ ===
 if selected == "➕ Добавить свою технику":
     st.subheader("Добавление своей техники")
-    st.caption("Укажите название и нормативные диапазоны для каждого показателя")
+    st.markdown('<p style="color:#d4e8c2; font-size:1rem;">Укажите название и нормативные диапазоны для каждого показателя</p>', unsafe_allow_html=True)
 
     with st.form("add_machine_form"):
         new_name = st.text_input("Название техники", placeholder="Например: К-701 (ЯМЗ-240)")
 
-        st.markdown("**Температура двигателя**")
+        st.markdown("**🌡️ Температура двигателя**")
         c1, c2, c3 = st.columns(3)
         with c1:
             t_min = st.number_input("Норма min (°C)", value=80.0, step=1.0, key="t_min")
@@ -113,7 +145,7 @@ if selected == "➕ Добавить свою технику":
         with c3:
             t_crit = st.number_input("Критично выше (°C)", value=105.0, step=1.0, key="t_crit")
 
-        st.markdown("**Давление масла**")
+        st.markdown("**🛢️ Давление масла**")
         c4, c5, c6 = st.columns(3)
         with c4:
             p_min = st.number_input("Норма min (бар)", value=2.0, step=0.1, key="p_min")
@@ -122,7 +154,7 @@ if selected == "➕ Добавить свою технику":
         with c6:
             p_crit = st.number_input("Критично ниже (бар)", value=1.0, step=0.1, key="p_crit")
 
-        st.markdown("**Вибрация**")
+        st.markdown("**📳 Вибрация**")
         c7, c8, c9 = st.columns(3)
         with c7:
             v_min = st.number_input("Норма min (мм/с)", value=0.0, step=0.1, key="v_min")
@@ -136,7 +168,7 @@ if selected == "➕ Добавить свою технику":
         if submitted:
             if not new_name.strip():
                 st.error("Введите название техники")
-            elif new_name in DEFAULT_MACHINES or new_name in st.session_state.custom_machines:
+            elif new_name in all_machines:
                 st.error("Техника с таким названием уже существует")
             else:
                 st.session_state.custom_machines[new_name] = {
@@ -147,16 +179,16 @@ if selected == "➕ Добавить свою технику":
                     "vibration": {"min": v_min, "max": v_max, "crit_high": v_crit,
                                   "label": "Вибрация (мм/с)", "note": f"Норма до {v_max} мм/с"}
                 }
-                st.success(f"Техника «{new_name}» добавлена! Выберите её в списке выше.")
+                st.success(f"Техника «{new_name}» добавлена! Выбираем её...")
+                st.session_state.selected_machine = new_name
                 st.rerun()
 
     st.stop()
 
-# === ОСНОВНОЙ ИНТЕРФЕЙС ДЛЯ ВЫБРАННОЙ ТЕХНИКИ ===
+# === ОСНОВНОЙ ИНТЕРФЕЙС ===
 spec = all_machines[selected]
 
-# Показываем нормативы
-st.markdown(f"**Нормативы для {selected}:**")
+st.markdown(f"### Нормативы для: {selected}")
 st.markdown(f'<div class="spec-box">🌡️ {spec["temp"]["note"]}</div>', unsafe_allow_html=True)
 st.markdown(f'<div class="spec-box">🛢️ {spec["pressure"]["note"]}</div>', unsafe_allow_html=True)
 st.markdown(f'<div class="spec-box">📳 {spec["vibration"]["note"]}</div>', unsafe_allow_html=True)
@@ -167,12 +199,37 @@ col_left, col_right = st.columns([1, 1.2])
 
 with col_left:
     st.subheader("Показания датчиков")
-    temp = st.number_input(spec["temp"]["label"], min_value=0.0, max_value=200.0,
-                           value=float((spec["temp"]["min"] + spec["temp"]["max"]) / 2), step=0.5)
-    pressure = st.number_input(spec["pressure"]["label"], min_value=0.0, max_value=20.0,
-                               value=float((spec["pressure"]["min"] + spec["pressure"]["max"]) / 2), step=0.1)
-    vibration = st.number_input(spec["vibration"]["label"], min_value=0.0, max_value=30.0,
-                                value=float((spec["vibration"]["min"] + spec["vibration"]["max"]) / 2), step=0.1)
+
+    # Показатели автоматически берутся из нормативов выбранной техники
+    temp = st.number_input(
+        spec["temp"]["label"],
+        min_value=0.0, max_value=200.0,
+        value=float((spec["temp"]["min"] + spec["temp"]["max"]) / 2),
+        step=0.5,
+        key=f"temp_{selected}"
+    )
+    pressure = st.number_input(
+        spec["pressure"]["label"],
+        min_value=0.0, max_value=20.0,
+        value=float((spec["pressure"]["min"] + spec["pressure"]["max"]) / 2),
+        step=0.1,
+        key=f"pressure_{selected}"
+    )
+    vibration = st.number_input(
+        spec["vibration"]["label"],
+        min_value=0.0, max_value=30.0,
+        value=float((spec["vibration"]["min"] + spec["vibration"]["max"]) / 2),
+        step=0.1,
+        key=f"vibration_{selected}"
+    )
+
+    st.markdown(
+        f'<p style="color:#a0b090; font-size:0.9rem;">Диапазоны: '
+        f'темп. {spec["temp"]["min"]}–{spec["temp"]["max"]}°C · '
+        f'давл. {spec["pressure"]["min"]}–{spec["pressure"]["max"]} бар · '
+        f'вибр. {spec["vibration"]["min"]}–{spec["vibration"]["max"]} мм/с</p>',
+        unsafe_allow_html=True
+    )
 
 
 def diagnose(spec, temp, pressure, vibration):
@@ -268,8 +325,8 @@ with col_right:
     else:
         st.markdown('''
         <div class="result-card" style="border-left-color: #3a4a32;">
-            <h2 style="color: #6b7a5a;">—</h2>
-            <p style="color: #8a9a7a;">Нажмите кнопку для анализа показаний.</p>
+            <h2 style="color: #8a9a7a !important;">—</h2>
+            <p>Нажмите кнопку для анализа показаний.</p>
         </div>''', unsafe_allow_html=True)
 
 st.markdown('---')
