@@ -35,23 +35,25 @@ st.markdown("""
         color: #2b2410 !important;
         font-weight: 700 !important;
     }
-    /* Открытое выпадающее меню — светлый текст на светлом фоне */
+
+    /* ИСПРАВЛЕНИЕ: Открытое выпадающее меню — тёмный фон, светлый текст */
     ul[role="listbox"] {
-        background-color: #d9c68a !important;
+        background-color: #1f2718 !important;
+        border: 1px solid #a3841f !important;
     }
     ul[role="listbox"] li {
         color: #f2f5ea !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
-        background-color: #d9c68a !important;
+        background-color: #1f2718 !important;
     }
     ul[role="listbox"] li:hover {
-        background-color: #c4ad6b !important;
-        color: #f2f5ea !important;
+        background-color: #3f4d33 !important;
+        color: #ffffff !important;
     }
     ul[role="listbox"] li[aria-selected="true"] {
-        background-color: #c4ad6b !important;
-        color: #f2f5ea !important;
+        background-color: #4d6b2a !important;
+        color: #ffffff !important;
     }
 
     /* Поля ввода — светлый фон, тёмный текст */
