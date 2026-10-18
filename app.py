@@ -1,142 +1,267 @@
 import streamlit as st
 import time
 
-st.set_page_config(page_title="АгроСервис", page_icon="🌾", layout="wide")
+st.set_page_config(page_title="АгроСервис Диагностика", page_icon="⚙️", layout="wide")
 
+# === СТРОГИЙ ИНЖЕНЕРНЫЙ СТИЛЬ (БЕЗ ШУМА) ===
 st.markdown("""
 <style>
-    .stApp { background-color: #121812; background-image: linear-gradient(180deg, #182019 0%, #0c100d 100%); }
-    html, body, [class*="css"], .stMarkdown, p, span, label, div { color: #dfe6d8 !important; }
-    h1, h2, h3 { color: #f0f4ea !important; }
+    /* Фон: тёмно-серый, без ярких градиентов */
+    .stApp { background-color: #121417; }
     
-    .selection-panel { background-color: #1c241c; border: 1px solid #3e4d3a; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-    .panel-title { color: #b5c9a5; font-weight: 700; font-size: 1.1rem; margin-bottom: 12px; display: block; }
+    /* Текст: мягкий светлый, контрастный но не режущий */
+    html, body, [class*="css"], .stMarkdown, p, span, label, div {
+        color: #d1d5db !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    h1, h2, h3 { color: #f3f4f6 !important; font-weight: 600; }
     
-    div[data-testid="stSelectbox"] label { color: #b5c9a5 !important; font-weight: 600 !important; }
-    div[data-baseweb="select"] > div { background-color: #2a3429 !important; color: #f0f4ea !important; border: 1px solid #4d6144 !important; }
-    div[data-baseweb="select"] span { color: #f0f4ea !important; }
+    /* Блоки (карточки) */
+    .block-container { padding-top: 2rem; }
+    div[data-testid="stVerticalBlock"] > div {
+        background-color: #1e2126;
+        border: 1px solid #333842;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+    }
     
-    div[data-baseweb="popover"] ul, ul[role="listbox"] { background-color: #1c241c !important; border: 1px solid #4d6144 !important; }
-    div[data-baseweb="popover"] li, ul[role="listbox"] li { color: #dfe6d8 !important; background-color: #1c241c !important; }
-    div[data-baseweb="popover"] li:hover, ul[role="listbox"] li:hover { background-color: #2a3429 !important; }
+    /* Выпадающий список */
+    div[data-testid="stSelectbox"] label { color: #9ca3af !important; font-size: 0.9rem; }
+    div[data-baseweb="select"] > div {
+        background-color: #2d333b !important;
+        color: #d1d5db !important;
+        border: 1px solid #444c56 !important;
+        border-radius: 6px !important;
+    }
+    div[data-baseweb="select"] span { color: #d1d5db !important; }
+    ul[role="listbox"] { background-color: #2d333b !important; }
+    ul[role="listbox"] li { color: #d1d5db !important; }
+    ul[role="listbox"] li:hover { background-color: #373e47 !important; }
     
-    div[data-testid="stNumberInput"] label { color: #b5c9a5 !important; }
-    div[data-testid="stNumberInput"] input { background-color: #e8ebe4 !important; color: #121812 !important; font-weight: 600 !important; border: 1px solid #6a7f5e !important; }
+    /* Радиокнопки */
+    div[data-testid="stRadio"] label { color: #9ca3af !important; }
+    div[data-testid="stRadio"] div[role="radiogroup"] label {
+        background-color: #2d333b !important;
+        border: 1px solid #444c56 !important;
+        border-radius: 6px !important;
+        padding: 6px 12px !important;
+        margin-right: 8px !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label p { color: #d1d5db !important; }
     
-    div[data-testid="stRadio"] label { color: #b5c9a5 !important; }
-    div[data-testid="stRadio"] div[role="radiogroup"] label { background-color: #2a3429 !important; border: 1px solid #4d6144 !important; border-radius: 8px !important; padding: 8px 16px !important; }
-    div[data-testid="stRadio"] div[role="radiogroup"] label:hover { background-color: #384832 !important; }
-    div[data-testid="stRadio"] div[role="radiogroup"] label p { color: #dfe6d8 !important; }
+    /* Поля ввода */
+    div[data-testid="stNumberInput"] label { color: #9ca3af !important; font-size: 0.9rem; }
+    div[data-testid="stNumberInput"] input {
+        background-color: #0d1117 !important;
+        color: #f3f4f6 !important;
+        border: 1px solid #444c56 !important;
+        font-weight: 600;
+    }
     
-    .result-card { padding: 24px; border-radius: 10px; margin-top: 16px; border-left: 6px solid #444; background-color: #1c241c; }
-    .result-card p { color: #dfe6d8 !important; }
-    .status-ok { border-left-color: #81c784; background-color: #1c2a1d; }
-    .status-warn { border-left-color: #e0b651; background-color: #2a2618; }
-    .status-crit { border-left-color: #e57373; background-color: #2a1c1c; }
-    .status-ok h2 { color: #81c784 !important; }
-    .status-warn h2 { color: #e0b651 !important; }
-    .status-crit h2 { color: #e57373 !important; }
+    /* Кнопка */
+    .stButton > button {
+        background-color: #2d333b !important;
+        color: #d1d5db !important;
+        border: 1px solid #444c56 !important;
+        font-weight: 600 !important;
+        width: 100%;
+    }
+    .stButton > button:hover { background-color: #373e47 !important; border-color: #6b7280 !important; }
     
-    .spec-box { background-color: #1c241c; padding: 12px 16px; border-radius: 8px; border: 1px solid #3e4d3a; margin-bottom: 8px; }
-    .fixed-param { background-color: #242e22; padding: 12px 16px; border-radius: 8px; border: 1px solid #4d6144; margin-bottom: 8px; }
-    .fixed-param strong { color: #b5c9a5 !important; }
+    /* Результаты */
+    .res-box { padding: 16px; border-radius: 6px; margin-bottom: 12px; border-left: 4px solid #444; background-color: #1a1d21; }
+    .res-ok { border-left-color: #4ade80; background-color: #142115; }
+    .res-warn { border-left-color: #fbbf24; background-color: #241f14; }
+    .res-crit { border-left-color: #f87171; background-color: #241414; }
+    .res-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .res-text { font-size: 0.95rem; line-height: 1.5; color: #d1d5db; }
     
-    .guide-link { display: inline-block; margin-top: 12px; padding: 12px 20px; background-color: #384832; color: #f0f4ea !important; border-radius: 8px; text-decoration: none; border: 1px solid #5c7052; font-weight: 600; }
-    .guide-link:hover { background-color: #4d6144; }
+    /* Ссылки */
+    .guide-link { display: inline-block; margin-top: 12px; color: #60a5fa !important; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .guide-link:hover { text-decoration: underline; }
     
-    .stButton > button { background-color: #4d6144 !important; color: #ffffff !important; font-weight: 700 !important; border: 1px solid #6a7f5e !important; padding: 12px 24px !important; border-radius: 8px !important; }
-    .stButton > button:hover { background-color: #5c7052 !important; }
-    
-    .gauge-container { margin-bottom: 20px; }
-    .gauge-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-weight: 600; color: #dfe6d8; }
-    .gauge-bar-bg { width: 100%; height: 22px; background: linear-gradient(90deg, #e57373 0%, #81c784 20%, #81c784 60%, #e0b651 80%, #e57373 100%); border-radius: 11px; overflow: hidden; border: 1px solid #3e4d3a; position: relative; }
-    .gauge-bar-fill { height: 100%; background: rgba(255, 255, 255, 0.2); transition: width 0.6s ease; border-radius: 11px; }
-    .gauge-pointer { position: absolute; top: -2px; width: 4px; height: 26px; background-color: #ffffff; border-radius: 2px; transition: left 0.6s ease; transform: translateX(-50%); z-index: 10; }
-    .gauge-labels { display: flex; justify-content: space-between; font-size: 0.8rem; color: #8a9e7a; margin-top: 4px; }
+    /* Полоски */
+    .gauge-container { margin-bottom: 16px; }
+    .gauge-header { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+    .gauge-bar-bg { width: 100%; height: 16px; background: #0d1117; border-radius: 8px; overflow: hidden; border: 1px solid #333842; position: relative; }
+    /* Градиент от плохого (красный) к хорошему (зеленый) и обратно */
+    .gauge-bar-fill { height: 100%; transition: width 0.4s ease; border-radius: 8px; }
+    .gauge-ok { background: #4ade80; }
+    .gauge-warn { background: #fbbf24; }
+    .gauge-crit { background: #f87171; }
+    .gauge-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: #6b7280; margin-top: 2px; }
 </style>
 """, unsafe_allow_html=True)
 
 st.title("АгроСервис: Диагностика техники")
+st.markdown("---")
 
-DEFAULT_MACHINES = {
+# === 1. БАЗА ТЕХНИКИ ===
+MACHINES = {
     "МТЗ-80/82": {
-        "temp": {k: {"min": 80, "max": 95, "crit_high": 105, "label": "Температура (°C)", "note": "80-95°C"} for k in ["idle","drive","load"]},
-        "pressure": {k: {"min": 2.0, "max": 3.5, "crit_low": 1.0, "label": "Давление (бар)", "note": "2.0-3.5 бар"} for k in ["idle","drive","load"]},
-        "vibration": {k: {"min": 0, "max": 4.5, "crit_high": 7.1, "label": "Вибрация (мм/с)", "note": "до 4.5 мм/с"} for k in ["idle","drive","load"]}
+        "idle": {"t": (70, 85, 95), "p": (0.8, 2.0, 0.5), "v": (0, 3.0, 5.0)},
+        "drive": {"t": (80, 95, 105), "p": (2.0, 3.5, 1.0), "v": (0, 4.5, 7.1)},
+        "load": {"t": (85, 100, 108), "p": (2.5, 4.5, 1.5), "v": (0, 5.5, 8.0)}
     },
     "John Deere": {
-        "temp": {k: {"min": 82, "max": 94, "crit_high": 104, "label": "Температура (°C)", "note": "82-94°C"} for k in ["idle","drive","load"]},
-        "pressure": {k: {"min": 2.9, "max": 4.5, "crit_low": 1.4, "label": "Давление (бар)", "note": "2.9-4.5 бар"} for k in ["idle","drive","load"]},
-        "vibration": {k: {"min": 0, "max": 4.5, "crit_high": 7.1, "label": "Вибрация (мм/с)", "note": "до 4.5 мм/с"} for k in ["idle","drive","load"]}
+        "idle": {"t": (70, 85, 95), "p": (1.4, 2.9, 0.8), "v": (0, 3.0, 5.0)},
+        "drive": {"t": (82, 94, 104), "p": (2.9, 4.5, 1.4), "v": (0, 4.5, 7.1)},
+        "load": {"t": (85, 100, 108), "p": (3.5, 5.5, 2.0), "v": (0, 5.5, 8.0)}
+    },
+    "Кировец": {
+        "idle": {"t": (70, 85, 95), "p": (2.0, 4.0, 1.5), "v": (0, 3.0, 5.0)},
+        "drive": {"t": (80, 95, 105), "p": (4.0, 7.0, 2.0), "v": (0, 4.5, 7.1)},
+        "load": {"t": (85, 100, 108), "p": (5.0, 8.0, 3.0), "v": (0, 5.5, 8.0)}
     }
 }
 
-if "custom" not in st.session_state: st.session_state.custom = {}
-all_mach = {**DEFAULT_MACHINES, **st.session_state.custom}
+# === 1. ВЫБОР ТЕХНИКИ ===
+st.subheader("1. Выбор техники")
+machine = st.selectbox("Техника", list(MACHINES.keys()))
 
-st.markdown('<div class="selection-panel"><span class="panel-title">Параметры</span>', unsafe_allow_html=True)
-c1, c2 = st.columns(2)
-with c1: selected = st.selectbox("Техника", list(all_mach.keys()) + ["Добавить"])
-with c2:
-    if selected != "Добавить":
-        MODE = {"idle": "Холостые", "drive": "Езда", "load": "Нагрузка"}
-        mode_key = st.radio("Режим", list(MODE.keys()), format_func=lambda x: MODE[x], horizontal=True)
-    else:
-        mode_key = "drive"; MODE = {"idle":"Х","drive":"Е","load":"Н"}
-st.markdown('</div>', unsafe_allow_html=True)
+# === 2. РЕЖИМ ===
+st.subheader("2. Режим использования")
+mode_map = {"idle": "Холостой ход", "drive": "Езда", "load": "Рабочая нагрузка"}
+mode = st.radio("Режим", list(mode_map.keys()), format_func=lambda x: mode_map[x], horizontal=True)
 
-if selected == "Добавить":
-    with st.form("add"):
-        name = st.text_input("Название")
-        tmpl = st.selectbox("Шаблон", list(DEFAULT_MACHINES.keys()))
-        if st.form_submit_button("Сохранить"):
-            if name.strip():
-                st.session_state.custom[name] = DEFAULT_MACHINES[tmpl]
-                st.rerun()
-    st.stop()
+spec = MACHINES[machine][mode]
 
-spec = all_mach[selected]
-cur_t, cur_p, cur_v = spec["temp"][mode_key], spec["pressure"][mode_key], spec["vibration"][mode_key]
+# === 3. СТАТИЧНЫЕ НОРМАТИВЫ ===
+st.subheader("3. Нормативы (справочно)")
+st.markdown(f"""
+<div class="block-container">
+    <p><b>Температура:</b> {spec['t'][0]} — {spec['t'][1]} °C (критично > {spec['t'][2]})</p>
+    <p><b>Давление масла:</b> {spec['p'][0]} — {spec['p'][1]} бар (критично < {spec['p'][2]})</p>
+    <p><b>Вибрация:</b> до {spec['v'][1]} мм/с (критично > {spec['v'][2]})</p>
+</div>
+""", unsafe_allow_html=True)
 
-st.markdown(f"### {selected} — {MODE[mode_key]}")
-st.markdown(f'<div class="spec-box">T: {cur_t["note"]}</div><div class="spec-box">P: {cur_p["note"]}</div><div class="spec-box">V: {cur_v["note"]}</div>', unsafe_allow_html=True)
+# === 4. ПОКАЗАНИЯ ДАТЧИКОВ ===
+st.subheader("4. Показания датчиков")
 
-col1, col2 = st.columns([1, 1.2])
-with col1:
-    st.subheader("Датчики")
-    t_val = st.number_input(cur_t["label"], value=float((cur_t["min"]+cur_t["max"])/2), key=f"t{selected}{mode_key}")
-    p_val = st.number_input(cur_p["label"], value=float((cur_p["min"]+cur_p["max"])/2), key=f"p{selected}{mode_key}")
-    v_val = st.number_input(cur_v["label"], value=float((cur_v["min"]+cur_v["max"])/2), key=f"v{selected}{mode_key}")
-
-    def gauge(lbl, val, spc, unit, is_p=False):
-        mx = spc["max"]*1.5 if is_p else spc["crit_high"]*1.2
-        pct = min(100, max(0, (val/mx)*100))
-        if is_p:
-            clr = "#e57373" if val<spc["crit_low"] else "#e0b651" if val<spc["min"] else "#81c784"
-        else:
-            clr = "#e57373" if val>spc["crit_high"] else "#e0b651" if val>spc["max"] else "#81c784"
-        st.markdown(f'<div class="gauge-container"><div class="gauge-header"><span>{lbl}</span><span style="color:{clr}">{val} {unit}</span></div><div class="gauge-bar-bg"><div class="gauge-bar-fill" style="width:{pct}%"></div><div class="gauge-pointer" style="left:{pct}%"></div></div><div class="gauge-labels"><span>0</span><span>Норма: {spc["min"]}-{spc["max"]}</span><span>{mx:.1f}</span></div></div>', unsafe_allow_html=True)
-
-    gauge("Температура", t_val, cur_t, "°C")
-    gauge("Давление", p_val, cur_p, "бар", True)
-    gauge("Вибрация", v_val, cur_v, "мм/с")
-
-with col2:
-    st.subheader("Результат")
-    if st.button("Анализ", type="primary", use_container_width=True):
-        score = 0
-        if t_val > cur_t["crit_high"]: score += 2
-        elif t_val > cur_t["max"] or t_val < cur_t["min"]: score += 1
-        if p_val < cur_p["crit_low"]: score += 2
-        elif p_val < cur_p["min"] or p_val > cur_p["max"]: score += 1
-        if v_val > cur_v["crit_high"]: score += 2
-        elif v_val > cur_v["max"]: score += 1
+def get_gauge_html(name, val, norm_min, norm_max, crit_val, is_high_bad, unit):
+    # Определяем цвет и ширину
+    if is_high_bad: # Для температуры и вибрации (высокое = плохо)
+        if val > crit_val: color, status = "#f87171", "КРИТИЧНО"
+        elif val > norm_max: color, status = "#fbbf24", "ВНИМАНИЕ"
+        else: color, status = "#4ade80", "НОРМА"
+        # Ширина от 0 до crit_val
+        width = min(100, max(0, (val / crit_val) * 100))
+    else: # Для давления (низкое = плохо)
+        if val < crit_val: color, status = "#f87171", "КРИТИЧНО"
+        elif val < norm_min: color, status = "#fbbf24", "ВНИМАНИЕ"
+        else: color, status = "#4ade80", "НОРМА"
+        # Ширина от 0 до norm_max * 1.5
+        width = min(100, max(0, (val / (norm_max * 1.5)) * 100))
         
-        if score == 0:
-            st.markdown('<div class="result-card status-ok"><h2>НОРМА</h2><p>Все системы в порядке.</p></div>', unsafe_allow_html=True)
-        elif score <= 2:
-            st.markdown('<div class="result-card status-warn"><h2>ВНИМАНИЕ</h2><p>Есть отклонения. Требуется проверка.</p></div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div class="result-card status-crit"><h2>РЕМОНТ</h2><p>Критические показатели!</p></div>', unsafe_allow_html=True)
+    html = f"""
+    <div class="gauge-container">
+        <div class="gauge-header">
+            <span>{name}</span>
+            <span style="color: {color}">{val} {unit} ({status})</span>
+        </div>
+        <div class="gauge-bar-bg">
+            <div class="gauge-bar-fill" style="width: {width}%; background-color: {color};"></div>
+        </div>
+        <div class="gauge-labels">
+            <span>0</span>
+            <span>Норма: {norm_min}–{norm_max}</span>
+            <span>{crit_val if is_high_bad else (norm_max * 1.5):.1f}</span>
+        </div>
+    </div>
+    """
+    return html
+
+val_t = st.number_input("Температура (°C)", value=float((spec['t'][0]+spec['t'][1])/2), key=f"t_{machine}_{mode}")
+st.markdown(get_gauge_html("Температура", val_t, spec['t'][0], spec['t'][1], spec['t'][2], True, "°C"), unsafe_allow_html=True)
+
+val_p = st.number_input("Давление масла (бар)", value=float((spec['p'][0]+spec['p'][1])/2), key=f"p_{machine}_{mode}")
+st.markdown(get_gauge_html("Давление", val_p, spec['p'][0], spec['p'][1], spec['p'][2], False, "бар"), unsafe_allow_html=True)
+
+val_v = st.number_input("Вибрация (мм/с)", value=float((spec['v'][0]+spec['v'][1])/2), key=f"v_{machine}_{mode}")
+st.markdown(get_gauge_html("Вибрация", val_v, spec['v'][0], spec['v'][1], spec['v'][2], True, "мм/с"), unsafe_allow_html=True)
+
+# === 5. РЕЗУЛЬТАТ ===
+st.subheader("5. Результат диагностики")
+
+if st.button("Выполнить диагностику", type="primary"):
+    score = 0
+    reasons = []
+    actions = []
+    links = set()
+
+    # Анализ температуры
+    if val_t > spec['t'][2]:
+        score += 2
+        reasons.append(f"Температура {val_t}°C критически высокая.")
+        actions.append("Остановите двигатель, проверьте охлаждающую жидкость и радиатор.")
+        links.add("cooling")
+    elif val_t > spec['t'][1]:
+        score += 1
+        reasons.append(f"Температура {val_t}°C повышена.")
+        actions.append("Снизьте нагрузку, проверьте термостат.")
+        links.add("cooling")
+
+    # Анализ давления
+    if val_p < spec['p'][2]:
+        score += 2
+        reasons.append(f"Давление масла {val_p} бар критически низкое.")
+        actions.append("Немедленно заглушите двигатель. Проверьте уровень масла и насос.")
+        links.add("oil")
+    elif val_p < spec['p'][0]:
+        score += 1
+        reasons.append(f"Давление масла {val_p} бар понижено.")
+        actions.append("Проверьте уровень масла, возможна замена фильтра.")
+        links.add("oil")
+
+    # Анализ вибрации
+    if val_v > spec['v'][2]:
+        score += 2
+        reasons.append(f"Вибрация {val_v} мм/с критическая.")
+        actions.append("Проверьте крепления, подшипники и балансировку.")
+        links.add("vibration")
+    elif val_v > spec['v'][1]:
+        score += 1
+        reasons.append(f"Вибрация {val_v} мм/с повышена.")
+        actions.append("Осмотрите вращающиеся узлы.")
+        links.add("vibration")
+
+    # Вывод
+    if score == 0:
+        st.markdown(f'''
+        <div class="res-box res-ok">
+            <div class="res-title" style="color: #4ade80;">НОРМА</div>
+            <div class="res-text">Все показатели в пределах нормы для режима <b>{mode_map[mode]}</b>.</div>
+        </div>''', unsafe_allow_html=True)
     else:
-        st.markdown('<div class="result-card"><p>Нажмите "Анализ"</p></div>', unsafe_allow_html=True)
+        if score <= 2:
+            status_cls, status_title, status_color = "res-warn", "ВНИМАНИЕ", "#fbbf24"
+        else:
+            status_cls, status_title, status_color = "res-crit", "ТРЕБУЕТСЯ РЕМОНТ", "#f87171"
+
+        reasons_html = "".join([f"<li>{r}</li>" for r in reasons])
+        actions_html = "".join([f"<li>{a}</li>" for a in actions])
+
+        st.markdown(f'''
+        <div class="res-box {status_cls}">
+            <div class="res-title" style="color: {status_color};">{status_title}</div>
+            <div class="res-text">
+                <b>Отклонения:</b><ul>{reasons_html}</ul>
+                <b>Рекомендации:</b><ul>{actions_html}</ul>
+            </div>
+        </div>''', unsafe_allow_html=True)
+
+    # Ссылки на решения
+    link_data = {
+        "cooling": ("Система охлаждения (учебник)", "https://barakud.ucoz.ru/news/rukovodstvo_po_remontu_traktora_mtz_80_i_mtz_82_1984_pdf_djvu_doc_rus/2012-03-12-2322"),
+        "oil": ("Смазочная система (учебник)", "https://barakud.ucoz.ru/news/rukovodstvo_po_remontu_traktora_mtz_80_i_mtz_82_1984_pdf_djvu_doc_rus/2012-03-12-2322"),
+        "vibration": ("ГОСТ по вибрации", "https://protect.gost.ru/gost/details/e2ddaae8-c27d-41e4-80e7-cca0de5fb059")
+    }
+    
+    if links:
+        st.markdown("**Полезные материалы:**")
+        for k in links:
+            if k in link_data:
+                text, url = link_data[k]
+                st.markdown(f'<a class="guide-link" href="{url}" target="_blank">🔗 {text}</a><br>', unsafe_allow_html=True)
