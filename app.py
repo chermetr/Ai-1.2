@@ -53,7 +53,7 @@ DEFAULT_MACHINES = {
                       "note": "Норма до 4.5 мм/с (зона B), критично выше 7.1 мм/с (зона D) [citation:22]"}
     },
     "John Deere PowerTech": {
-        "temp": {"min": 82, "max": 94, "crit_high": 104, "label": "Температура ОЖ (°C)",
+        "temp": {"min": 82, "max": 94, "crit_high": 104, "label": "Температура  (°C)",
                  "note": "Норма 82–94°C, при >104°C снизить нагрузку"},
         "pressure": {"min": 2.9, "max": 4.5, "crit_low": 1.4, "label": "Давление масла (бар)",
                      "note": "Норма 2.9 бар на номинале (масло 105°C), мин. 1.4 бар на холостом [citation:11][citation:26]"},
